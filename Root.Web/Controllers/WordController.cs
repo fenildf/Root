@@ -31,14 +31,14 @@ namespace Root.Web.Controllers
 			return OperationJsonResult(result);
 		}
 
-		public ActionResult Edit(string word)
+		public ActionResult Edit(string id)
 		{
-			var searchedWord = _searchService.GetWordAccurately(word);
+			var word = _searchService.GetWord(id);
 
-			if (searchedWord == null)
-				return RedirectToAction("New", "Word", new { word });
+			if (word == null)
+				return RedirectToAction("New", "Word");
 
-			return View(searchedWord);
+			return View(word);
 		}
 
 		public ActionResult Search(string word)

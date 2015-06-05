@@ -23,15 +23,12 @@ namespace Root.Application.Services.Implementation
 
 		#region Word
 
-		public WordDto GetWordAccurately(string word)
+		public WordDto GetWord(string id)
 		{
-			if (string.IsNullOrWhiteSpace(word))
-				return null;
-
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
 				var repository = unitOfWork.GetRepository<IWordRepository>();
-				var spec = WordSpecifications.StemEquals(word);
+				var spec = WordSpecifications.IdEquals(id);
 
 				return Mapper.Map<Word, WordDto>(
 					repository.Get(spec, false, w => w.Morphemes, w => w.Interpretations));
@@ -49,7 +46,7 @@ namespace Root.Application.Services.Implementation
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
 				var repository = unitOfWork.GetRepository<IWordRepository>();
-				var spec = WordSpecifications.StemLike(word);
+				var spec = WordSpecifications.StemLike(word.Trim());
 				var wordList = repository.GetAll(spec, false, w => w.Morphemes, w => w.Interpretations)
 					.OrderBy(w => w.Stem)
 					.Paging(1, maxCount, out totalCount);

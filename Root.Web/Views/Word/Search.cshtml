@@ -17,7 +17,7 @@
 		<div class="well well-lg">
 			<p>
 				<strong>@word.Stem</strong>
-				<a href="@Url.Action("Edit", "Word", new { word = word.Stem })">[编辑]</a>
+				<a href="@Url.Action("Edit", "Word", new { word.Id })">[编辑]</a>
 			</p>
 
 			@foreach (var interpreta in word.Interpretations)
