@@ -1,0 +1,16 @@
+﻿@using Hangerd.Utility
+
+@helper CreateOptionsForEnum(Type enumType)
+{
+	if (!enumType.IsEnum)
+	{
+		return;
+	}
+
+	var values = Enum.GetValues(enumType);
+
+	foreach (var value in values)
+	{
+		<option value="@value">@CommonTools.GetEnumDescription(value)</option>
+	}
+}

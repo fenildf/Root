@@ -1,0 +1,30 @@
+﻿@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Root.Application.DataObjects
+
+@model WordDto
+
+<div class="clearfix">
+	<h4>编辑单词</h4>
+
+	<hr />
+
+	<form id="addWordForm" class="form-horizontal">
+		<div class="form-group">
+			<label class="col-md-1 control-label">词　干:</label>
+			<div class="col-md-4">
+				<p class="form-control-static">@Model.Stem</p>
+			</div>
+		</div>
+
+		
+	</form>
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+		
+	</script>
+}

@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Root</title>
+	<link href="http://resource.dfancy.cn/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<style>
+		* {
+			font-family: "微软雅黑";
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<nav role="navigation">
+			<div class="navbar navbar-inverse">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+
+						<a class="navbar-brand" href="@Url.Action("Index", "Home")" title="Root" rel="homepage">Root</a>
+					</div>
+
+					<div class="navbar-collapse collapse navbar-responsive-collapse">
+						<ul class="nav navbar-nav">
+							<li>
+								<a href="@Url.Action("New", "Morpheme")">添加词素</a>
+							</li>
+							<li>
+								<a href="@Url.Action("New", "Word")">添加单词</a>
+							</li>
+						</ul>
+					
+						@using (Html.BeginForm("Search", "Word", FormMethod.Get, new { @class = "navbar-form navbar-right" }))
+						{
+							<div class="input-group">
+								<input name="word" type="text" class="form-control" placeholder="输入要查找的单词" />
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+								</span>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<div class="container">
+		@RenderBody()
+	</div>
+
+	<footer class="clearfix">
+		<div class="container">
+			<hr>
+			<div class="row">
+				<div class="copyright text-center">
+					&copy; Copyright 2015 <a href="mailto:leo010227@outlook.com" rel="home">leo010227@outlook.com</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<script src="http://resource.dfancy.cn/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+	<script src="http://resource.dfancy.cn/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
+
+	@RenderSection("scripts", false)
+</body>
+</html>

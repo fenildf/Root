@@ -1,0 +1,35 @@
+﻿@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Hangerd.Utility
+@using Root.Application.DataObjects
+
+@model IEnumerable<WordDto>
+
+<div class="clearfix">
+	<h4><strong>@ViewBag.QueryWord</strong> 的查询结果</h4>
+
+	<hr />
+	
+	@foreach (var word in Model)
+	{
+		<div class="well well-lg">
+			<p>
+				<strong>@word.Stem</strong>
+				<a href="@Url.Action("Edit", "Word", new { word = word.Stem })">[编辑]</a>
+			</p>
+
+			@foreach (var interpreta in word.Interpretations)
+			{
+				<p>@CommonTools.GetEnumDescription(interpreta.PartOfSpeech) @interpreta.Interpretation</p>
+			}
+		</div>
+	}
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+
+	</script>
+}

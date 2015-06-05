@@ -1,0 +1,81 @@
+﻿@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Root.Application.DataObjects
+
+@model string
+
+<div class="clearfix">
+	<h4>添加词素</h4>
+
+	<hr />
+
+	<form id="addMorphemeForm" class="form-horizontal">
+		<div class="form-group">
+			<label class="col-md-1 control-label">本　体:</label>
+			<div class="col-md-4">
+				@Html.TextBox("Standard", Model, new { @class = "form-control" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-1 control-label">变　体:</label>
+			<div class="col-md-4">
+				@Html.TextBox("Variant", string.Empty, new { @class = "form-control" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-1 control-label">描　述:</label>
+			<div class="col-md-4">
+				@Html.TextBox("Description", string.Empty, new { @class = "form-control" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-1 control-label">类　型:</label>
+			<div class="col-md-4">
+				<select name="Type" class="form-control">
+					@PageHelper.CreateOptionsForEnum(typeof(MorphemeTypeDto))
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-1 col-md-4">
+				<button id="btnSubmit" type="button" class="btn btn-sm btn-primary">添 加</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+		$("#btnSubmit").bind("click", function () {
+			if (!$.trim($("#Standard").val())) {
+				alert("词素本体不可为空");
+				return;
+			}
+
+			if (!$("#Description").val()) {
+				alert("词素描述不可为空");
+				return;
+			}
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("Add", "Morpheme")",
+				data: $("#addMorphemeForm").serialize(),
+				success: function (result) {
+					alert(result.Message);
+
+					if (result.Success) {
+						window.location.href = "@Url.Action("Index", "Home")";
+					}
+				}
+			});
+		});
+	</script>
+}

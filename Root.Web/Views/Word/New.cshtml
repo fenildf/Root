@@ -1,0 +1,74 @@
+﻿@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Root.Application.DataObjects
+
+@model string
+
+<div class="clearfix">
+	<h4>添加单词</h4>
+
+	<hr />
+
+	<form id="addWordForm" class="form-horizontal">
+		<div class="form-group">
+			<label class="col-md-1 control-label">词　干:</label>
+			<div class="col-md-4">
+				@Html.TextBox("stem", Model, new { @class = "form-control" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-1 control-label">词　性:</label>
+			<div class="col-md-4">
+				<select name="PartOfSpeech" class="form-control">
+					@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-1 control-label">释　义:</label>
+			<div class="col-md-4">
+				@Html.TextBox("Interpretation", string.Empty, new { @class = "form-control" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-1 col-md-4">
+				<button id="btnSubmit" type="button" class="btn btn-sm btn-primary">添 加</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+		$("#btnSubmit").bind("click", function () {
+			if (!$.trim($("#stem").val())) {
+				alert("词干不可为空");
+				return;
+			}
+
+			if (!$("#Interpretation").val()) {
+				alert("释义不可为空");
+				return;
+			}
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("Add", "Word")",
+				data: $("#addWordForm").serialize(),
+				success: function (result) {
+					alert(result.Message);
+
+					if (result.Success) {
+						window.location.href = "@Url.Action("Index", "Home")";
+					}
+				}
+			});
+		});
+	</script>
+}
