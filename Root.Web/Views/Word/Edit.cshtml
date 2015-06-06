@@ -2,29 +2,100 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@using Hangerd.Utility
 @using Root.Application.DataObjects
 
 @model WordDto
 
 <div class="clearfix">
-	<h4>编辑单词</h4>
+	<h4>
+		<a href="@Url.Action("Detail", "Word", new { Model.Id })" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
+		&nbsp;&nbsp;
+		<strong>@Model.Stem</strong>
+	</h4>
 
 	<hr />
 
-	<form id="addWordForm" class="form-horizontal">
+	<div class="form-horizontal">
 		<div class="form-group">
-			<label class="col-md-1 control-label">词　干:</label>
+			<label class="col-md-1 control-label">释　义:</label>
 			<div class="col-md-4">
-				<p class="form-control-static">@Model.Stem</p>
+				<ul class="list-group">
+					@foreach (var interpretation in Model.Interpretations.OrderBy(i => i.Order))
+					{
+						<li class="list-group-item">
+							@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation
+							<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeInterpretation('@interpretation.Id')">删除</button>
+						</li>
+					}
+				</ul>
+
+				<div class="input-group input-group-sm">
+					<select id="selectPartOfSpeech" class="form-control">
+						@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
+					</select>
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</span>
+					<input id="txtInterpretation" type="text" class="form-control" />
+					<span class="input-group-btn">
+						<button id="btnAddInterpretation" type="button" class="btn btn-success pull-right">添加</button>
+					</span>
+				</div>
 			</div>
 		</div>
-
-		
-	</form>
+	</div>
 </div>
 
 @section scripts {
 	<script type="text/javascript">
-		
+		$("#btnAddInterpretation").bind("click", function () {
+			if (!$.trim($("#txtInterpretation").val())) {
+				alert("释义内容不可为空");
+				return;
+			}
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("AddInterpretation", "Word")",
+				data: {
+					wordId: "@Model.Id",
+					interpretationDto: {
+						PartOfSpeech: $("#selectPartOfSpeech").val(),
+						Interpretation: $("#txtInterpretation").val()
+					}
+				},
+				success: function (result) {
+					alert(result.Message);
+
+					if (result.Success) {
+						window.location.reload();
+					}
+				}
+			});
+		});
+
+		function removeInterpretation(interpretationId) {
+			if (!confirm("是否确认删除该释义?"))
+				return;
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("RemoveInterpretation", "Word")",
+				data: {
+					wordId: "@Model.Id",
+					interpretationId: interpretationId
+				},
+				success: function (result) {
+					alert(result.Message);
+
+					if (result.Success) {
+						window.location.reload();
+					}
+				}
+			});
+		}
 	</script>
 }

@@ -28,7 +28,7 @@ namespace Root.Web.Controllers
 		{
 			var result = _inputService.AddWord(stem, interpretationDto);
 
-			return OperationJsonResult(result);
+			return JsonContent(new { result.Message, Word = result.Value });
 		}
 
 		public ActionResult Edit(string id)
@@ -41,6 +41,22 @@ namespace Root.Web.Controllers
 			return View(word);
 		}
 
+		[HttpPost]
+		public ActionResult AddInterpretation(string wordId, WordInterpretationDto interpretationDto)
+		{
+			var result = _inputService.AddWordInterpretation(wordId, interpretationDto);
+
+			return OperationJsonResult(result);
+		}
+
+		[HttpPost]
+		public ActionResult RemoveInterpretation(string wordId, string interpretationId)
+		{
+			var result = _inputService.RemoveWordInterpretation(wordId, interpretationId);
+
+			return OperationJsonResult(result);
+		}
+
 		public ActionResult Search(string word)
 		{
 			int totalCount;
@@ -49,6 +65,16 @@ namespace Root.Web.Controllers
 			ViewBag.QueryWord = word;
 
 			return View(wordList);
+		}
+
+		public ActionResult Detail(string id)
+		{
+			var word = _searchService.GetWord(id);
+
+			if (word == null)
+				return RedirectToAction("New", "Word");
+
+			return View(word);
 		}
     }
 }

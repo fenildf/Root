@@ -20,24 +20,23 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-md-1 control-label">词　性:</label>
-			<div class="col-md-4">
-				<select name="PartOfSpeech" class="form-control">
-					@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
-				</select>
-			</div>
-		</div>
-
-		<div class="form-group">
 			<label class="col-md-1 control-label">释　义:</label>
 			<div class="col-md-4">
-				@Html.TextBox("Interpretation", string.Empty, new { @class = "form-control" })
+				<div class="input-group">
+					<select name="PartOfSpeech" class="form-control">
+						@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
+					</select>
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</span>
+					@Html.TextBox("Interpretation", string.Empty, new { @class = "form-control" })
+				</div>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<div class="col-md-offset-1 col-md-4">
-				<button id="btnSubmit" type="button" class="btn btn-sm btn-primary">添 加</button>
+				<button id="btnSubmit" type="button" class="btn btn-sm btn-success">添 加</button>
 			</div>
 		</div>
 	</form>
@@ -52,7 +51,7 @@
 			}
 
 			if (!$("#Interpretation").val()) {
-				alert("释义不可为空");
+				alert("释义内容不可为空");
 				return;
 			}
 
@@ -64,8 +63,8 @@
 				success: function (result) {
 					alert(result.Message);
 
-					if (result.Success) {
-						window.location.href = "@Url.Action("Index", "Home")";
+					if (result.Word != null) {
+						window.location.href = "@Url.Action("Edit", "Word")/" + result.Word.Id;
 					}
 				}
 			});

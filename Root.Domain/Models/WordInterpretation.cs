@@ -1,9 +1,10 @@
-﻿using Hangerd;
+﻿using System;
+using Hangerd;
 using Hangerd.Entity;
 
 namespace Root.Domain.Models
 {
-	public class WordInterpretation : EntityBase, IValidatable
+	public class WordInterpretation : EntityBase
 	{
 		#region Public Properties
 
@@ -32,6 +33,12 @@ namespace Root.Domain.Models
 
 		public WordInterpretation(PartOfSpeech partOfSpeech, string interpretation, int order = 0)
 		{
+			if (!Enum.IsDefined(typeof(PartOfSpeech), partOfSpeech))
+				throw new HangerdException("未知词性");
+
+			if (string.IsNullOrWhiteSpace(interpretation))
+				throw new HangerdException("释义内容不可为空");
+
 			PartOfSpeech = partOfSpeech;
 			Interpretation = interpretation;
 			Order = order;
@@ -40,12 +47,6 @@ namespace Root.Domain.Models
 		#endregion
 
 		#region Public Methods
-
-		public void Validate()
-		{
-			if (string.IsNullOrWhiteSpace(Interpretation))
-				throw new HangerdException("释义内容不可为空");
-		}
 
 		public void ModifyOrder(int newOrder)
 		{

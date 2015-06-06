@@ -138,6 +138,7 @@
     <Content Include="Views\Shared\_Error.cshtml" />
     <Content Include="Views\Word\Edit.cshtml" />
     <Content Include="Views\Word\Search.cshtml" />
+    <Content Include="Views\Word\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

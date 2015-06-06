@@ -17,12 +17,12 @@
 		<div class="well well-lg">
 			<p>
 				<strong>@word.Stem</strong>
-				<a href="@Url.Action("Edit", "Word", new { word.Id })">[编辑]</a>
+				<a href="@Url.Action("Detail", "Word", new { word.Id })" target="_blank">[详细]</a>
 			</p>
 
-			@foreach (var interpreta in word.Interpretations)
+			@foreach (var interpretation in word.Interpretations.OrderBy(i => i.Order))
 			{
-				<p>@CommonTools.GetEnumDescription(interpreta.PartOfSpeech) @interpreta.Interpretation</p>
+				<p>@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation</p>
 			}
 		</div>
 	}

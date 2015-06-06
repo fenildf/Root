@@ -13,7 +13,11 @@ namespace Root.Application.Services
 
 		#region Word
 
-		HangerdResult<bool> AddWord(string stem, WordInterpretationDto interpretationDto);
+		HangerdResult<WordDto> AddWord(string stem, WordInterpretationDto interpretationDto);
+
+		HangerdResult<bool> AddWordInterpretation(string wordId, WordInterpretationDto interpretationDto);
+
+		HangerdResult<bool> RemoveWordInterpretation(string wordId, string interpretationId);
 
 		#endregion
 	}

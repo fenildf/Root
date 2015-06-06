@@ -38,7 +38,7 @@ namespace Root.Domain.Models
 		{
 		}
 
-		public Word(string stem, WordInterpretation defaultInterpretation)
+		public Word(string stem, IList<Morpheme> morphemes, WordInterpretation defaultInterpretation)
 		{
 			if (string.IsNullOrWhiteSpace(stem))
 				throw new HangerdException("词干不可为空");
@@ -47,6 +47,7 @@ namespace Root.Domain.Models
 				throw new HangerdException("默认释义不可为空");
 
 			Stem = stem;
+			Morphemes = morphemes;
 			Interpretations = new List<WordInterpretation> { defaultInterpretation };
 		}
 

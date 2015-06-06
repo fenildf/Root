@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hangerd;
+using Hangerd.Validation;
 using Root.Application.DataObjects;
 using Root.Domain.Models;
 using Root.Domain.Repositories;
@@ -44,18 +45,62 @@ namespace Root.Application.Services.Implementation
 
 		#region Word
 
-		public HangerdResult<bool> AddWord(string stem, WordInterpretationDto interpretationDto)
+		public HangerdResult<WordDto> AddWord(string stem, WordInterpretationDto interpretationDto)
+		{
+			return TryOperate(() =>
+			{
+				using (var unitOfWork = DbContextFactory.CreateContext())
+				{
+					//todo: morphemes
+					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+					var word = new Word(
+						stem,
+						null,
+						new WordInterpretation((PartOfSpeech) interpretationDto.PartOfSpeech, interpretationDto.Interpretation));
+
+					wordRepository.Add(word);
+
+					unitOfWork.Commit();
+
+					return Mapper.Map<Word, WordDto>(word);
+				}
+			});
+		}
+
+		public HangerdResult<bool> AddWordInterpretation(string wordId, WordInterpretationDto interpretationDto) 
 		{
 			return TryOperate(() =>
 			{
 				using (var unitOfWork = DbContextFactory.CreateContext())
 				{
 					var repository = unitOfWork.GetRepository<IWordRepository>();
-					var word = new Word(
-						stem,
-						new WordInterpretation((PartOfSpeech) interpretationDto.PartOfSpeech, interpretationDto.Interpretation));
+					var word = repository.Get(wordId, true, w => w.Interpretations);
 
-					repository.Add(word);
+					Requires.NotNull(word, "单词信息不存在");
+
+					word.AddInterpretation((PartOfSpeech)interpretationDto.PartOfSpeech, interpretationDto.Interpretation);
+
+					repository.Update(word);
+
+					unitOfWork.Commit();
+				}
+			});
+		}
+
+		public HangerdResult<bool> RemoveWordInterpretation(string wordId, string interpretationId) 
+		{
+			return TryOperate(() =>
+			{
+				using (var unitOfWork = DbContextFactory.CreateContext())
+				{
+					var repository = unitOfWork.GetRepository<IWordRepository>();
+					var word = repository.Get(wordId, true, w => w.Interpretations);
+
+					Requires.NotNull(word, "单词信息不存在");
+
+					word.RemoveInterpretation(interpretationId);
+
+					repository.Update(word);
 
 					unitOfWork.Commit();
 				}
