@@ -23,5 +23,13 @@ namespace Root.Application.DataObjects
 		/// 类型
 		/// </summary>
 		public MorphemeTypeDto Type { get; set; }
+
+		public override string ToString()
+		{
+			return string.Format("[ {0}{1} {2} ]",
+				Standard,
+				string.IsNullOrWhiteSpace(Variant) ? string.Empty : string.Format(" ({0})", Variant),
+				Description);
+		}
 	}
 }

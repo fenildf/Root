@@ -1,5 +1,4 @@
 ﻿using Hangerd.Bootstrapper;
-using Hangerd.Extensions;
 using Microsoft.Practices.Unity;
 
 namespace Root.Domain.Bootstrapper

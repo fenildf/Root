@@ -35,9 +35,9 @@ namespace Root.Application.Services.Implementation
 			}
 		}
 
-		public IEnumerable<WordDto> GetWordListFuzzily(string word, int maxCount, out int totalCount)
+		public IEnumerable<WordDto> GetWordListWithInterpretation(string fuzzyWord, int maxCount, out int totalCount)
 		{
-			if (string.IsNullOrWhiteSpace(word))
+			if (string.IsNullOrWhiteSpace(fuzzyWord))
 			{
 				totalCount = 0;
 				return new WordDto[0];
@@ -45,13 +45,33 @@ namespace Root.Application.Services.Implementation
 
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
-				var repository = unitOfWork.GetRepository<IWordRepository>();
-				var spec = WordSpecifications.StemLike(word.Trim());
-				var wordList = repository.GetAll(spec, false, w => w.Morphemes, w => w.Interpretations)
+				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+				var wordList = wordRepository
+					.GetAll(WordSpecifications.StemLike(fuzzyWord.Trim()), false, w => w.Interpretations)
 					.OrderBy(w => w.Stem)
 					.Paging(1, maxCount, out totalCount);
 
 				return Mapper.Map<IEnumerable<Word>, IEnumerable<WordDto>>(wordList);
+			}
+		}
+
+		public IEnumerable<MorphemeDto> GetMorphemeList(string fuzzyMorpheme, int maxCount, out int totalCount)
+		{
+			if (string.IsNullOrWhiteSpace(fuzzyMorpheme))
+			{
+				totalCount = 0;
+				return new MorphemeDto[0];
+			}
+
+			using (var unitOfWork = DbContextFactory.CreateContext())
+			{
+				var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
+				var morphemeList = morphemeRepository
+					.GetAll(MorphemeSpecifications.StandardLike(fuzzyMorpheme.Trim()), false)
+					.OrderBy(m => m.Standard)
+					.Paging(1, maxCount, out totalCount);
+
+				return Mapper.Map<IEnumerable<Morpheme>, IEnumerable<MorphemeDto>>(morphemeList);
 			}
 		}
 

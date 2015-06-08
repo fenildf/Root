@@ -8,11 +8,11 @@ using Root.Infrastructure;
 
 namespace Root.Application.Services.Implementation
 {
-	public class InputService : ApplicationServiceBase, IInputService
+	public class MaintainService : ApplicationServiceBase, IMaintainService
 	{
 		#region Constructors
 
-		public InputService(IRootDbContextFactory dbContextFactory)
+		public MaintainService(IRootDbContextFactory dbContextFactory)
 			: base(dbContextFactory)
 		{
 		}
@@ -27,14 +27,14 @@ namespace Root.Application.Services.Implementation
 			{
 				using (var unitOfWork = DbContextFactory.CreateContext())
 				{
-					var repository = unitOfWork.GetRepository<IMorphemeRepository>();
+					var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
 					var morpheme = new Morpheme(
 						morphemeDto.Standard,
 						morphemeDto.Variant,
 						morphemeDto.Description,
 						(MorphemeType) morphemeDto.Type);
 
-					repository.Add(morpheme);
+					morphemeRepository.Add(morpheme);
 
 					unitOfWork.Commit();
 				}
@@ -73,14 +73,14 @@ namespace Root.Application.Services.Implementation
 			{
 				using (var unitOfWork = DbContextFactory.CreateContext())
 				{
-					var repository = unitOfWork.GetRepository<IWordRepository>();
-					var word = repository.Get(wordId, true, w => w.Interpretations);
+					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+					var word = wordRepository.Get(wordId, true, w => w.Interpretations);
 
 					Requires.NotNull(word, "单词信息不存在");
 
 					word.AddInterpretation((PartOfSpeech)interpretationDto.PartOfSpeech, interpretationDto.Interpretation);
 
-					repository.Update(word);
+					wordRepository.Update(word);
 
 					unitOfWork.Commit();
 				}
@@ -93,14 +93,55 @@ namespace Root.Application.Services.Implementation
 			{
 				using (var unitOfWork = DbContextFactory.CreateContext())
 				{
-					var repository = unitOfWork.GetRepository<IWordRepository>();
-					var word = repository.Get(wordId, true, w => w.Interpretations);
+					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+					var word = wordRepository.Get(wordId, true, w => w.Interpretations);
 
 					Requires.NotNull(word, "单词信息不存在");
 
 					word.RemoveInterpretation(interpretationId);
 
-					repository.Update(word);
+					wordRepository.Update(word);
+
+					unitOfWork.Commit();
+				}
+			});
+		}
+
+		public HangerdResult<bool> AddMorphemeForWord(string wordId, string morphemeId)
+		{
+			return TryOperate(() =>
+			{
+				using (var unitOfWork = DbContextFactory.CreateContext())
+				{
+					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+					var word = wordRepository.Get(wordId, true, w => w.Morphemes);
+
+					Requires.NotNull(word, "单词信息不存在");
+
+					var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
+					var morpheme = morphemeRepository.Get(morphemeId, true);
+
+					Requires.NotNull(morpheme, "词素信息不存在");
+
+					word.AddMorpheme(morpheme);
+
+					unitOfWork.Commit();
+				}
+			});
+		}
+
+		public HangerdResult<bool> RemoveMorphemeForWord(string wordId, string morphemeId)
+		{
+			return TryOperate(() =>
+			{
+				using (var unitOfWork = DbContextFactory.CreateContext())
+				{
+					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+					var word = wordRepository.Get(wordId, true, w => w.Morphemes);
+
+					Requires.NotNull(word, "单词信息不存在");
+
+					word.RemoveMorpheme(morphemeId);
 
 					unitOfWork.Commit();
 				}

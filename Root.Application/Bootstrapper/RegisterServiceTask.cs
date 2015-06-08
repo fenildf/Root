@@ -16,7 +16,7 @@ namespace Root.Application.Bootstrapper
 		{
 			//application services
 			_container.RegisterTypeAsSingleton<ISearchService, SearchService>();
-			_container.RegisterTypeAsSingleton<IInputService, InputService>();
+			_container.RegisterTypeAsSingleton<IMaintainService, MaintainService>();
 		}
 	}
 }

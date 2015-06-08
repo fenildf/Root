@@ -8,14 +8,14 @@ namespace Root.Web.Controllers
     public class WordController : HangerdController
     {
 		private readonly ISearchService _searchService;
-		private readonly IInputService _inputService;
+		private readonly IMaintainService _maintainService;
 
 		public WordController(
 			ISearchService searchService,
-			IInputService inputService)
+			IMaintainService maintainService)
 		{
 			_searchService = searchService;
-			_inputService = inputService;
+			_maintainService = maintainService;
 		}
 
 		public ActionResult New(string word)
@@ -26,7 +26,7 @@ namespace Root.Web.Controllers
 		[HttpPost]
 		public ActionResult Add(string stem, WordInterpretationDto interpretationDto)
 		{
-			var result = _inputService.AddWord(stem, interpretationDto);
+			var result = _maintainService.AddWord(stem, interpretationDto);
 
 			return JsonContent(new { result.Message, Word = result.Value });
 		}
@@ -44,7 +44,7 @@ namespace Root.Web.Controllers
 		[HttpPost]
 		public ActionResult AddInterpretation(string wordId, WordInterpretationDto interpretationDto)
 		{
-			var result = _inputService.AddWordInterpretation(wordId, interpretationDto);
+			var result = _maintainService.AddWordInterpretation(wordId, interpretationDto);
 
 			return OperationJsonResult(result);
 		}
@@ -52,7 +52,23 @@ namespace Root.Web.Controllers
 		[HttpPost]
 		public ActionResult RemoveInterpretation(string wordId, string interpretationId)
 		{
-			var result = _inputService.RemoveWordInterpretation(wordId, interpretationId);
+			var result = _maintainService.RemoveWordInterpretation(wordId, interpretationId);
+
+			return OperationJsonResult(result);
+		}
+
+		[HttpPost]
+		public ActionResult AddMorphemeForWord(string wordId, string morphemeId)
+		{
+			var result = _maintainService.AddMorphemeForWord(wordId, morphemeId);
+
+			return OperationJsonResult(result);
+		}
+
+		[HttpPost]
+		public ActionResult RemoveMorphemeForWord(string wordId, string morphemeId)
+		{
+			var result = _maintainService.RemoveMorphemeForWord(wordId, morphemeId);
 
 			return OperationJsonResult(result);
 		}
@@ -60,7 +76,7 @@ namespace Root.Web.Controllers
 		public ActionResult Search(string word)
 		{
 			int totalCount;
-			var wordList = _searchService.GetWordListFuzzily(word, 10, out totalCount);
+			var wordList = _searchService.GetWordListWithInterpretation(word, 10, out totalCount);
 
 			ViewBag.QueryWord = word;
 

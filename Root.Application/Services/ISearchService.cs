@@ -7,6 +7,8 @@ namespace Root.Application.Services
 	{
 		WordDto GetWord(string id);
 
-		IEnumerable<WordDto> GetWordListFuzzily(string word, int maxCount, out int totalCount);
+		IEnumerable<WordDto> GetWordListWithInterpretation(string fuzzyWord, int maxCount, out int totalCount);
+
+		IEnumerable<MorphemeDto> GetMorphemeList(string fuzzyMorpheme, int maxCount, out int totalCount);
 	}
 }

@@ -38,7 +38,7 @@ namespace Root.Domain.Models
 		{
 		}
 
-		public Word(string stem, IList<Morpheme> morphemes, WordInterpretation defaultInterpretation)
+		public Word(string stem, ICollection<Morpheme> morphemes, WordInterpretation defaultInterpretation)
 		{
 			if (string.IsNullOrWhiteSpace(stem))
 				throw new HangerdException("词干不可为空");
@@ -85,6 +85,30 @@ namespace Root.Domain.Models
 
 			foreach (var interpretation in Interpretations.Where(e => e.Order > removedInterpretation.Order))
 				interpretation.ModifyOrder(interpretation.Order - 1);
+		}
+
+		public void AddMorpheme(Morpheme morpheme)
+		{
+			if (Morphemes == null)
+				throw new HangerdException("Morphemes has not been loaded.");
+
+			if (Morphemes.Contains(morpheme))
+				throw new HangerdException("该词素已添加成功");
+
+			Morphemes.Add(morpheme);
+		}
+
+		public void RemoveMorpheme(string morphemeId)
+		{
+			if (Morphemes == null)
+				throw new HangerdException("Morphemes has not been loaded.");
+
+			var morpheme = Morphemes.FirstOrDefault(m => m.Id == morphemeId);
+
+			if (morpheme == null)
+				throw new HangerdException("词素信息不存在");
+
+			Morphemes.Remove(morpheme);
 		}
 
 		#endregion

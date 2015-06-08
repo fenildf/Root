@@ -15,8 +15,30 @@
 	</h4>
 
 	<hr />
-
+	
 	<div class="form-horizontal">
+		<div class="form-group">
+			<label class="col-md-1 control-label">词　素:</label>
+			<div class="col-md-4">
+				@if (Model.Morphemes.Any())
+				{
+					<ul class="list-group">
+						@foreach (var morpheme in Model.Morphemes)
+						{
+							<li class="list-group-item">
+								@morpheme.ToString()
+								<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeMorphemeForWord('@morpheme.Id')">删 除</button>
+							</li>
+						}
+					</ul>
+				}
+				
+				<button id="btnShowSelectMorphemeModal" type="button" class="btn btn-default">查 找</button>
+			</div>
+		</div>
+
+		<div class="form-group"></div>
+
 		<div class="form-group">
 			<label class="col-md-1 control-label">释　义:</label>
 			<div class="col-md-4">
@@ -25,12 +47,12 @@
 					{
 						<li class="list-group-item">
 							@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation
-							<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeInterpretation('@interpretation.Id')">删除</button>
+							<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeInterpretation('@interpretation.Id')">删 除</button>
 						</li>
 					}
 				</ul>
 
-				<div class="input-group input-group-sm">
+				<div class="input-group">
 					<select id="selectPartOfSpeech" class="form-control">
 						@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
 					</select>
@@ -39,8 +61,38 @@
 					</span>
 					<input id="txtInterpretation" type="text" class="form-control" />
 					<span class="input-group-btn">
-						<button id="btnAddInterpretation" type="button" class="btn btn-success pull-right">添加</button>
+						<button id="btnAddInterpretation" type="button" class="btn btn-success">添 加</button>
 					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="selectMorphemeModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<br /><br /><br /><br />
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">查找词素</h4>
+			</div>
+			<div class="modal-body">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="form-inline">
+							<div class="input-group input-group-sm">
+								<input id="txtMorpheme" type="text" class="form-control" />
+								<span class="input-group-btn">
+									<button id="btnSearchMorpheme" class="btn btn-primary" type="button">
+										<span class="glyphicon glyphicon-search"></span>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<ul id="morphemeList" class="list-group"></ul>
 				</div>
 			</div>
 		</div>
@@ -49,6 +101,10 @@
 
 @section scripts {
 	<script type="text/javascript">
+		$("#btnShowSelectMorphemeModal").bind("click", function () {
+			$("#selectMorphemeModal").modal("show");
+		});
+
 		$("#btnAddInterpretation").bind("click", function () {
 			if (!$.trim($("#txtInterpretation").val())) {
 				alert("释义内容不可为空");
@@ -76,7 +132,7 @@
 			});
 		});
 
-		function removeInterpretation(interpretationId) {
+		function removeInterpretation (interpretationId) {
 			if (!confirm("是否确认删除该释义?"))
 				return;
 
@@ -87,6 +143,85 @@
 				data: {
 					wordId: "@Model.Id",
 					interpretationId: interpretationId
+				},
+				success: function (result) {
+					alert(result.Message);
+
+					if (result.Success) {
+						window.location.reload();
+					}
+				}
+			});
+		}
+
+		$("#btnSearchMorpheme").bind("click", function () {
+			var morpheme = $.trim($("#txtMorpheme").val());
+
+			if (!morpheme) {
+				alert("请填写要查找的词素");
+				return;
+			}
+
+			var morphemeList = $("#morphemeList").empty();
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("GetMorphemeList", "Morpheme")",
+				data: { morpheme: morpheme },
+				success: function (data) {
+					if (!data || data.length === 0) {
+						var addMorphemeTip =
+							"<li class=\"list-group-item\"> 未找到 <strong>" + morpheme + "</strong> 相关信息 &nbsp;" +
+								"	<a href=\"@Url.Action("New", "Morpheme")?morpheme=" + morpheme + "\" class=\"btn btn-xs btn-success\" target=\"_blank\">添 加</button>" +
+								"</li>";
+
+						morphemeList.append(addMorphemeTip);
+					} else {
+						for (var i = 0; i < data.length; i++) {
+							var item =
+								"<li class=\"list-group-item\">" +
+									"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + data[i].Id + "')\">添 加</button>" +
+									"	&nbsp;&nbsp;" + data[i].Value +
+									"</li>";
+
+							morphemeList.append(item);
+						}
+					}
+				}
+			});
+		});
+
+		function addMorphemeForWord(morphemeId) {
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("AddMorphemeForWord", "Word")",
+				data: {
+					wordId: "@Model.Id",
+					morphemeId: morphemeId
+				},
+				success: function (result) {
+					alert(result.Message);
+
+					if (result.Success) {
+						window.location.reload();
+					}
+				}
+			});
+		}
+
+		function removeMorphemeForWord (morphemeId) {
+			if (!confirm("是否确认删除该词素?"))
+				return;
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("RemoveMorphemeForWord", "Word")",
+				data: {
+					wordId: "@Model.Id",
+					morphemeId: morphemeId
 				},
 				success: function (result) {
 					alert(result.Message);
