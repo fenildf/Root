@@ -1,0 +1,60 @@
+﻿@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Hangerd.Utility
+
+@model Root.Web.Models.MorphemeDetailModel
+
+<div class="clearfix">
+	<h4>
+		<a class="btn btn-sm btn-success" href="@Url.Action("Edit", "Morpheme", new { Model.Morpheme.Id })"><span class="glyphicon glyphicon-edit"></span></a>
+		&nbsp;&nbsp;
+		<strong>@Model.Morpheme.Standard</strong>
+	</h4>
+
+	<hr />
+
+	<div class="form-horizontal">
+		<div class="form-group">
+			<label class="col-md-1 control-label">类　型:</label>
+			<div class="col-md-4">
+				<p class="form-control-static">@CommonTools.GetEnumDescription(Model.Morpheme.Type)</p>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-1 control-label">变　体:</label>
+			<div class="col-md-4">
+				<p class="form-control-static">@Model.Morpheme.Variant</p>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-1 control-label">描　述:</label>
+			<div class="col-md-4">
+				<p class="form-control-static">@Model.Morpheme.Description</p>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-md-1 control-label">相　关:</label>
+			<div class="col-md-4">
+				@foreach (var word in Model.RelatedWords)
+				{
+					<div class="well well-lg">
+						<p>
+							<strong>@word.Stem</strong>
+							<a href="@Url.Action("Detail", "Word", new { word.Id })" target="_blank">[详细]</a>
+						</p>
+
+						@foreach (var interpretation in word.Interpretations.OrderBy(i => i.Order))
+						{
+							<p>@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation</p>
+						}
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>

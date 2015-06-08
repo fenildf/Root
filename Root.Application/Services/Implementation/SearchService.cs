@@ -21,17 +21,53 @@ namespace Root.Application.Services.Implementation
 
 		#endregion
 
+		#region Morpheme
+
+		public MorphemeDto GetMorpheme(string id)
+		{
+			using (var unitOfWork = DbContextFactory.CreateContext())
+			{
+				var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
+				var spec = MorphemeSpecifications.IdEquals(id);
+
+				return Mapper.Map<Morpheme, MorphemeDto>(
+					morphemeRepository.Get(spec, false));
+			}
+		}
+
+		public IEnumerable<MorphemeDto> GetMorphemeList(string fuzzyMorpheme, int maxCount, out int totalCount)
+		{
+			if (string.IsNullOrWhiteSpace(fuzzyMorpheme))
+			{
+				totalCount = 0;
+				return new MorphemeDto[0];
+			}
+
+			using (var unitOfWork = DbContextFactory.CreateContext())
+			{
+				var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
+				var morphemeList = morphemeRepository
+					.GetAll(MorphemeSpecifications.StandardLike(fuzzyMorpheme.Trim()), false)
+					.OrderBy(m => m.Standard)
+					.Paging(1, maxCount, out totalCount);
+
+				return Mapper.Map<IEnumerable<Morpheme>, IEnumerable<MorphemeDto>>(morphemeList);
+			}
+		}
+
+		#endregion
+
 		#region Word
 
 		public WordDto GetWord(string id)
 		{
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
-				var repository = unitOfWork.GetRepository<IWordRepository>();
+				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
 				var spec = WordSpecifications.IdEquals(id);
 
 				return Mapper.Map<Word, WordDto>(
-					repository.Get(spec, false, w => w.Morphemes, w => w.Interpretations));
+					wordRepository.Get(spec, false, w => w.Morphemes, w => w.Interpretations));
 			}
 		}
 
@@ -55,23 +91,16 @@ namespace Root.Application.Services.Implementation
 			}
 		}
 
-		public IEnumerable<MorphemeDto> GetMorphemeList(string fuzzyMorpheme, int maxCount, out int totalCount)
+		public IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId)
 		{
-			if (string.IsNullOrWhiteSpace(fuzzyMorpheme))
-			{
-				totalCount = 0;
-				return new MorphemeDto[0];
-			}
-
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
-				var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
-				var morphemeList = morphemeRepository
-					.GetAll(MorphemeSpecifications.StandardLike(fuzzyMorpheme.Trim()), false)
-					.OrderBy(m => m.Standard)
-					.Paging(1, maxCount, out totalCount);
+				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+				var wordList = wordRepository
+					.GetAll(WordSpecifications.ContainsMorphemeId(morphemeId), false, w => w.Interpretations)
+					.OrderBy(w => w.Stem);
 
-				return Mapper.Map<IEnumerable<Morpheme>, IEnumerable<MorphemeDto>>(morphemeList);
+				return Mapper.Map<IEnumerable<Word>, IEnumerable<WordDto>>(wordList);
 			}
 		}
 

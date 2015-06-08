@@ -26,7 +26,13 @@
 						@foreach (var morpheme in Model.Morphemes)
 						{
 							<li class="list-group-item">
-								@morpheme.ToString()
+								<strong>@morpheme.Standard</strong> @morpheme.ToVariant() [ @morpheme.Description ]
+
+								@if (morpheme.Type == MorphemeTypeDto.Root)
+								{
+									<span class="glyphicon glyphicon-flag"></span>
+								}
+								
 								<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeMorphemeForWord('@morpheme.Id')">删 除</button>
 							</li>
 						}

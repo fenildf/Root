@@ -1,4 +1,5 @@
-﻿using Hangerd.Specification;
+﻿using System.Linq;
+using Hangerd.Specification;
 using Root.Domain.Models;
 
 namespace Root.Domain.Specifications
@@ -8,6 +9,11 @@ namespace Root.Domain.Specifications
 		public static Specification<Word> StemLike(string stem)
 		{
 			return new DirectSpecification<Word>(w => w.Stem.Contains(stem));
+		}
+
+		public static Specification<Word> ContainsMorphemeId(string morphemeId)
+		{
+			return new DirectSpecification<Word>(w => w.Morphemes.Any(m => m.Id == morphemeId));
 		}
 	}
 }

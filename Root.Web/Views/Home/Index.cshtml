@@ -3,10 +3,24 @@
 }
 
 <div class="clearfix">
-	<div class="jumbotron">
-		<h1>Root index page</h1>
-		<p>...</p>
-		<p>...</p>
-		<p>...</p>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="page-header">
+				<h1>Root Index</h1>
+			</div>
+		</div>
+		<div class="col-md-6 col-md-offset-3">
+			@using (Html.BeginForm("Search", "Word", FormMethod.Get))
+			{
+				<div class="input-group input-group-lg">
+					<input name="word" type="text" class="form-control" placeholder="输入要查找的单词" />
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+					</span>
+				</div>
+			}
+		</div>
 	</div>
+
+	<br /><br /><br />
 </div>

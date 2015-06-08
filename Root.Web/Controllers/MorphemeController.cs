@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Hangerd.Mvc;
 using Root.Application.DataObjects;
 using Root.Application.Services;
+using Root.Web.Models;
 
 namespace Root.Web.Controllers
 {
@@ -32,6 +33,38 @@ namespace Root.Web.Controllers
 			return OperationJsonResult(result);
 		}
 
+		public ActionResult Edit(string id)
+		{
+			var morpheme = _searchService.GetMorpheme(id);
+
+			if (morpheme == null)
+				return RedirectToAction("New", "Morpheme");
+
+			return View(morpheme);
+		}
+
+		public ActionResult Detail(string id)
+		{
+			var morpheme = _searchService.GetMorpheme(id);
+
+			if (morpheme == null)
+				return RedirectToAction("New", "Morpheme");
+
+			return View(new MorphemeDetailModel
+			{
+				Morpheme = morpheme,
+				RelatedWords = _searchService.GetWordListByMorpheme(id)
+			});
+		}
+
+		[HttpPost]
+		public ActionResult Modify(string id, MorphemeDto morphemeDto)
+		{
+			var result = _maintainService.ModifyMorpheme(id, morphemeDto);
+
+			return OperationJsonResult(result);
+		}
+
 		[HttpPost]
 		public ActionResult GetMorphemeList(string morpheme)
 		{
@@ -40,7 +73,7 @@ namespace Root.Web.Controllers
 				.Select(m => new
 				{
 					m.Id,
-					Value = m.ToString()
+					Value = string.Format("<strong>{0}</strong> {1} [ {2} ]", m.Standard, m.ToVariant(), m.Description)
 				});
 
 			return JsonContent(morphemeList);

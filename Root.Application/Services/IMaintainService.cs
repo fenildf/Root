@@ -9,6 +9,8 @@ namespace Root.Application.Services
 
 		HangerdResult<bool> AddMorpheme(MorphemeDto morphemeDto);
 
+		HangerdResult<bool> ModifyMorpheme(string morphemeId, MorphemeDto morphemeDto);
+
 		#endregion
 
 		#region Word

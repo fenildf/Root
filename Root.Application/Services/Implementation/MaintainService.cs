@@ -41,6 +41,24 @@ namespace Root.Application.Services.Implementation
 			});
 		}
 
+		public HangerdResult<bool> ModifyMorpheme(string morphemeId, MorphemeDto morphemeDto)
+		{
+			return TryOperate(() =>
+			{
+				using (var unitOfWork = DbContextFactory.CreateContext())
+				{
+					var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
+					var morpheme = morphemeRepository.Get(morphemeId, true);
+
+					morpheme.Modify(morphemeDto.Variant, morphemeDto.Description);
+
+					morphemeRepository.Update(morpheme);
+
+					unitOfWork.Commit();
+				}
+			});
+		}
+
 		#endregion
 
 		#region Word

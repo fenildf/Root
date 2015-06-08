@@ -24,12 +24,9 @@ namespace Root.Application.DataObjects
 		/// </summary>
 		public MorphemeTypeDto Type { get; set; }
 
-		public override string ToString()
+		public string ToVariant()
 		{
-			return string.Format("[ {0}{1} {2} ]",
-				Standard,
-				string.IsNullOrWhiteSpace(Variant) ? string.Empty : string.Format(" ({0})", Variant),
-				Description);
+			return string.IsNullOrWhiteSpace(Variant) ? string.Empty : string.Format("({0})", Variant);
 		}
 	}
 }

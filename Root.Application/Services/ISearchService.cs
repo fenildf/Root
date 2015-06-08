@@ -5,10 +5,22 @@ namespace Root.Application.Services
 {
 	public interface ISearchService
 	{
+		#region Morpheme
+
+		MorphemeDto GetMorpheme(string id);
+
+		IEnumerable<MorphemeDto> GetMorphemeList(string fuzzyMorpheme, int maxCount, out int totalCount);
+
+		#endregion
+
+		#region Word
+
 		WordDto GetWord(string id);
 
 		IEnumerable<WordDto> GetWordListWithInterpretation(string fuzzyWord, int maxCount, out int totalCount);
 
-		IEnumerable<MorphemeDto> GetMorphemeList(string fuzzyMorpheme, int maxCount, out int totalCount);
+		IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId);
+
+		#endregion
 	}
 }

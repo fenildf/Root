@@ -126,6 +126,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\MorphemeDetailModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,8 @@
     <Content Include="Views\Word\Edit.cshtml" />
     <Content Include="Views\Word\Search.cshtml" />
     <Content Include="Views\Word\Detail.cshtml" />
+    <Content Include="Views\Morpheme\Edit.cshtml" />
+    <Content Include="Views\Morpheme\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -146,9 +149,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Root.Application\Root.Application.csproj">
       <Project>{735703bd-090c-4ccf-ba40-e2ff7d3ac2ca}</Project>
