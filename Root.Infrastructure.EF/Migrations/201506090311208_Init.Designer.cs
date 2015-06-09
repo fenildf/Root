@@ -13,7 +13,7 @@ namespace Root.Infrastructure.EF.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201506050617453_Init"; }
+            get { return "201506090311208_Init"; }
         }
         
         string IMigrationMetadata.Source

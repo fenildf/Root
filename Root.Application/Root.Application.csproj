@@ -69,6 +69,7 @@
     <Compile Include="DataObjects\PartOfSpeechDto.cs" />
     <Compile Include="DataObjects\WordDto.cs" />
     <Compile Include="DataObjects\WordInterpretationDto.cs" />
+    <Compile Include="DataObjects\WordMorphemeDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Implementation\ApplicationServiceBase.cs" />
     <Compile Include="Services\Implementation\MaintainService.cs" />

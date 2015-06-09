@@ -22,6 +22,7 @@ namespace Root.Application.Bootstrapper
 			Mapper.CreateMap<Morpheme, MorphemeDto>()
 				.ForMember(dto => dto.Type, mce => mce.ResolveUsing(e => (MorphemeTypeDto)e.Type));
 			Mapper.CreateMap<Word, WordDto>();
+			Mapper.CreateMap<WordMorpheme, WordMorphemeDto>();
 			Mapper.CreateMap<WordInterpretation, WordInterpretationDto>()
 				.ForMember(dto => dto.PartOfSpeech, mce => mce.ResolveUsing(e => (PartOfSpeechDto)e.PartOfSpeech));
 

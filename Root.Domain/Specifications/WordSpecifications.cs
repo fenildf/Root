@@ -13,7 +13,7 @@ namespace Root.Domain.Specifications
 
 		public static Specification<Word> ContainsMorphemeId(string morphemeId)
 		{
-			return new DirectSpecification<Word>(w => w.Morphemes.Any(m => m.Id == morphemeId));
+			return new DirectSpecification<Word>(w => w.Morphemes.Any(m => m.Morpheme.Id == morphemeId));
 		}
 	}
 }

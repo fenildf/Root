@@ -18,7 +18,7 @@ namespace Root.Domain.Models
 		/// <summary>
 		/// 词素列表
 		/// </summary>
-		public ICollection<Morpheme> Morphemes { get; private set; }
+		public ICollection<WordMorpheme> Morphemes { get; private set; }
 
 		/// <summary>
 		/// 释义列表
@@ -38,7 +38,7 @@ namespace Root.Domain.Models
 		{
 		}
 
-		public Word(string stem, ICollection<Morpheme> morphemes, WordInterpretation defaultInterpretation)
+		public Word(string stem, WordInterpretation defaultInterpretation)
 		{
 			if (string.IsNullOrWhiteSpace(stem))
 				throw new HangerdException("词干不可为空");
@@ -47,7 +47,6 @@ namespace Root.Domain.Models
 				throw new HangerdException("默认释义不可为空");
 
 			Stem = stem;
-			Morphemes = morphemes;
 			Interpretations = new List<WordInterpretation> { defaultInterpretation };
 		}
 
@@ -92,10 +91,10 @@ namespace Root.Domain.Models
 			if (Morphemes == null)
 				throw new HangerdException("Morphemes has not been loaded.");
 
-			if (Morphemes.Contains(morpheme))
-				throw new HangerdException("该词素已添加成功");
+			if (Morphemes.Any(m => m.Morpheme.Id == morpheme.Id))
+				throw new HangerdException("该词素已添加");
 
-			Morphemes.Add(morpheme);
+			Morphemes.Add(new WordMorpheme(morpheme, Morphemes.Count));
 		}
 
 		public void RemoveMorpheme(string morphemeId)
@@ -103,12 +102,15 @@ namespace Root.Domain.Models
 			if (Morphemes == null)
 				throw new HangerdException("Morphemes has not been loaded.");
 
-			var morpheme = Morphemes.FirstOrDefault(m => m.Id == morphemeId);
+			var removedMorpheme = Morphemes.FirstOrDefault(m => m.Morpheme.Id == morphemeId);
 
-			if (morpheme == null)
+			if (removedMorpheme == null)
 				throw new HangerdException("词素信息不存在");
 
-			Morphemes.Remove(morpheme);
+			Morphemes.Remove(removedMorpheme);
+
+			foreach (var morpheme in Morphemes.Where(m => m.Order > removedMorpheme.Order))
+				morpheme.ModifyOrder(morpheme.Order - 1);
 		}
 
 		#endregion

@@ -3,9 +3,9 @@ using Root.Domain.Models;
 
 namespace Root.Infrastructure.EF.ModelConfigurations
 {
-	public class WordConfig : EntityTypeConfigBase<Word>
+	public class WordMorphemeConfig : EntityTypeConfigBase<WordMorpheme>
 	{
-		public WordConfig()
+		public WordMorphemeConfig()
 		{
 		}
 	}

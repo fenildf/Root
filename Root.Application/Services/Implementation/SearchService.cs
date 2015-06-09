@@ -64,10 +64,9 @@ namespace Root.Application.Services.Implementation
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
 				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
-				var spec = WordSpecifications.IdEquals(id);
+				var word = wordRepository.Get(WordSpecifications.IdEquals(id), false, w => w.Morphemes, w => w.Interpretations);
 
-				return Mapper.Map<Word, WordDto>(
-					wordRepository.Get(spec, false, w => w.Morphemes, w => w.Interpretations));
+				return Mapper.Map<Word, WordDto>(word);
 			}
 		}
 

@@ -1,7 +1,8 @@
-using System.Data.Entity.Migrations;
-
 namespace Root.Infrastructure.EF.Migrations
 {
+    using System;
+    using System.Data.Entity.Migrations;
+    
     public partial class Init : DbMigration
     {
         public override void Up()
@@ -49,24 +50,27 @@ namespace Root.Infrastructure.EF.Migrations
                 "dbo.WordMorpheme",
                 c => new
                     {
-                        Word_Id = c.String(nullable: false, maxLength: 32),
-                        Morpheme_Id = c.String(nullable: false, maxLength: 32),
+                        Id = c.String(nullable: false, maxLength: 32),
+                        Order = c.Int(nullable: false),
+                        LastModified = c.DateTime(nullable: false),
+                        Morpheme_Id = c.String(maxLength: 32),
+                        Word_Id = c.String(maxLength: 32),
                     })
-                .PrimaryKey(t => new { t.Word_Id, t.Morpheme_Id })
-                .ForeignKey("dbo.Word", t => t.Word_Id, cascadeDelete: true)
-                .ForeignKey("dbo.Morpheme", t => t.Morpheme_Id, cascadeDelete: true)
-                .Index(t => t.Word_Id)
-                .Index(t => t.Morpheme_Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Morpheme", t => t.Morpheme_Id)
+                .ForeignKey("dbo.Word", t => t.Word_Id)
+                .Index(t => t.Morpheme_Id)
+                .Index(t => t.Word_Id);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.WordMorpheme", "Morpheme_Id", "dbo.Morpheme");
             DropForeignKey("dbo.WordMorpheme", "Word_Id", "dbo.Word");
+            DropForeignKey("dbo.WordMorpheme", "Morpheme_Id", "dbo.Morpheme");
             DropForeignKey("dbo.WordInterpretation", "Word_Id", "dbo.Word");
-            DropIndex("dbo.WordMorpheme", new[] { "Morpheme_Id" });
             DropIndex("dbo.WordMorpheme", new[] { "Word_Id" });
+            DropIndex("dbo.WordMorpheme", new[] { "Morpheme_Id" });
             DropIndex("dbo.WordInterpretation", new[] { "Word_Id" });
             DropTable("dbo.WordMorpheme");
             DropTable("dbo.WordInterpretation");

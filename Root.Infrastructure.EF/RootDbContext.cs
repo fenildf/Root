@@ -15,6 +15,7 @@ namespace Root.Infrastructure.EF
 			modelBuilder.Configurations
 				.Add(new MorphemeConfig())
 				.Add(new WordConfig())
+				.Add(new WordMorphemeConfig())
 				.Add(new WordInterpretationConfig());
 
 			base.OnModelCreating(modelBuilder);

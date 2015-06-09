@@ -69,10 +69,11 @@
     <Compile Include="Bootstrapper\InitServiceTask.cs" />
     <Compile Include="Bootstrapper\RegisterServiceTask.cs" />
     <Compile Include="Factories\RootDbContextFactory.cs" />
-    <Compile Include="Migrations\201506050617453_Init.cs" />
-    <Compile Include="Migrations\201506050617453_Init.Designer.cs">
-      <DependentUpon>201506050617453_Init.cs</DependentUpon>
+    <Compile Include="Migrations\201506090311208_Init.cs" />
+    <Compile Include="Migrations\201506090311208_Init.Designer.cs">
+      <DependentUpon>201506090311208_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="ModelConfigurations\WordMorphemeConfig.cs" />
     <Compile Include="ModelConfigurations\WordInterpretationConfig.cs" />
     <Compile Include="ModelConfigurations\WordConfig.cs" />
     <Compile Include="ModelConfigurations\MorphemeConfig.cs" />
@@ -96,8 +97,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201506050617453_Init.resx">
-      <DependentUpon>201506050617453_Init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201506090311208_Init.resx">
+      <DependentUpon>201506090311208_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

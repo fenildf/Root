@@ -73,7 +73,6 @@ namespace Root.Application.Services.Implementation
 					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
 					var word = new Word(
 						stem,
-						null,
 						new WordInterpretation((PartOfSpeech) interpretationDto.PartOfSpeech, interpretationDto.Interpretation));
 
 					wordRepository.Add(word);

@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper\RegisterServiceTask.cs" />
+    <Compile Include="Models\WordMorpheme.cs" />
     <Compile Include="Specifications\MorphemeSpecifications.cs" />
     <Compile Include="Specifications\WordSpecifications.cs" />
     <Compile Include="Utilities\IdGenerator.cs" />

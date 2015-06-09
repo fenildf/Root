@@ -13,7 +13,7 @@ namespace Root.Application.DataObjects
 		/// <summary>
 		/// 词素列表
 		/// </summary>
-		public ICollection<MorphemeDto> Morphemes { get; set; }
+		public ICollection<WordMorphemeDto> Morphemes { get; set; }
 
 		/// <summary>
 		/// 释义列表
