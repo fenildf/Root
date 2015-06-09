@@ -73,6 +73,10 @@
     <Compile Include="Migrations\201506090311208_Init.Designer.cs">
       <DependentUpon>201506090311208_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506090620348_UpdateWord.cs" />
+    <Compile Include="Migrations\201506090620348_UpdateWord.Designer.cs">
+      <DependentUpon>201506090620348_UpdateWord.cs</DependentUpon>
+    </Compile>
     <Compile Include="ModelConfigurations\WordMorphemeConfig.cs" />
     <Compile Include="ModelConfigurations\WordInterpretationConfig.cs" />
     <Compile Include="ModelConfigurations\WordConfig.cs" />
@@ -99,6 +103,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201506090311208_Init.resx">
       <DependentUpon>201506090311208_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506090620348_UpdateWord.resx">
+      <DependentUpon>201506090620348_UpdateWord.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,9 +9,9 @@
 
 <div class="clearfix">
 	<h4>
-		<a class="btn btn-sm btn-success" href="@Url.Action("Edit", "Word", new { Model.Id })"><span class="glyphicon glyphicon-edit"></span></a>
+		<a class="btn btn-sm btn-success" href="@Url.Action("Edit", "Word", new { word = Model.Stem })"><span class="glyphicon glyphicon-edit"></span></a>
 		&nbsp;&nbsp;
-		<strong>@Model.Stem</strong>
+		<strong>@Model.Stem</strong> [ @Model.Phonetic ]
 	</h4>
 
 	<hr />
@@ -31,6 +31,10 @@
 							@if (item.Morpheme.Type == MorphemeTypeDto.Root)
 							{
 								<span class="glyphicon glyphicon-flag"></span>
+
+								<button type="button" class="btn btn-xs btn-default pull-right" onclick="loadRelatedWordList('@item.Morpheme.Id')">
+									<span class="glyphicon glyphicon-menu-right"></span>
+								</button>
 							}
 						</li>
 					}
@@ -53,3 +57,63 @@
 		</div>
 	</div>
 </div>
+
+
+<div class="modal fade" id="relatedWordListModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<br /><br /><br /><br />
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">相关词汇</h4>
+			</div>
+			<div class="modal-body">
+				<div id="relatedWordList"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+	function loadRelatedWordList(morphemeId) {
+		var relatedWordList = $("#relatedWordList").empty();
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "@Url.Action("GetRelatedWordList", "Morpheme")",
+			data: {
+				morphemeId: morphemeId,
+				excludedWordId: "@Model.Id"
+				},
+				success: function (data) {
+					if (!data || data.length === 0) {
+						var noWordTip = "<div class=\"well well-sm\">暂无相关词汇</div>";
+
+						relatedWordList.append(noWordTip);
+					} else {
+						for (var i = 0; i < data.length; i++) {
+							var interpretation = "";
+
+							for (var j = 0; j < data[i].Interpretations.length; j++) {
+								interpretation += "<p>" + data[i].Interpretations[j].PartOfSpeech + " " + data[i].Interpretations[j].Interpretation + "</p>";
+							}
+
+							var item = "<div class=\"well well-sm\">" +
+								"	<p>" +
+								"		<strong>" + data[i].Stem + "</strong>" +
+								"		<a href=\"@Url.Action("Detail", "Word")?word=" + data[i].Id + "\">[详细]</a>" +
+							"	</p>" + interpretation +
+							"</div>";
+
+						relatedWordList.append(item);
+					}
+				}
+
+				$("#relatedWordListModal").modal("show");
+			}
+		});
+	}
+	</script>
+}

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using Hangerd.Mvc;
+using Hangerd.Utility;
 using Root.Application.DataObjects;
 using Root.Application.Services;
 using Root.Web.Models;
@@ -50,10 +51,12 @@ namespace Root.Web.Controllers
 			if (morpheme == null)
 				return RedirectToAction("New", "Morpheme");
 
+			int totalCount;
+
 			return View(new MorphemeDetailModel
 			{
 				Morpheme = morpheme,
-				RelatedWords = _searchService.GetWordListByMorpheme(id)
+				RelatedWords = _searchService.GetWordListByMorpheme(id, 20, out totalCount)
 			});
 		}
 
@@ -77,6 +80,25 @@ namespace Root.Web.Controllers
 				});
 
 			return JsonContent(morphemeList);
+		}
+
+		[HttpPost]
+		public ActionResult GetRelatedWordList(string morphemeId, string excludedWordId)
+		{
+			int totalCount;
+			var words = _searchService.GetWordListByMorpheme(morphemeId, excludedWordId, 20, out totalCount)
+				.Select(word => new
+				{
+					word.Id,
+					word.Stem,
+					Interpretations = word.Interpretations.OrderBy(i => i.Order).Select(i => new
+					{
+						i.Interpretation,
+						PartOfSpeech = CommonTools.GetEnumDescription(i.PartOfSpeech)
+					})
+				});
+
+			return JsonContent(words);
 		}
 	}
 }

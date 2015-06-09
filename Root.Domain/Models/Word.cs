@@ -16,6 +16,11 @@ namespace Root.Domain.Models
 		public string Stem { get; private set; }
 
 		/// <summary>
+		/// 音标
+		/// </summary>
+		public string Phonetic { get; private set; }
+
+		/// <summary>
 		/// 词素列表
 		/// </summary>
 		public ICollection<WordMorpheme> Morphemes { get; private set; }

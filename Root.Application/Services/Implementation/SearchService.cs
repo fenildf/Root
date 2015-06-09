@@ -59,12 +59,12 @@ namespace Root.Application.Services.Implementation
 
 		#region Word
 
-		public WordDto GetWord(string id)
+		public WordDto GetWord(string wordStem)
 		{
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
 				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
-				var word = wordRepository.Get(WordSpecifications.IdEquals(id), false, w => w.Morphemes, w => w.Interpretations);
+				var word = wordRepository.Get(WordSpecifications.StemEquals(wordStem), false, w => w.Morphemes, w => w.Interpretations);
 
 				return Mapper.Map<Word, WordDto>(word);
 			}
@@ -90,14 +90,30 @@ namespace Root.Application.Services.Implementation
 			}
 		}
 
-		public IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId)
+		public IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId, int maxCount, out int totalCount)
 		{
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
 				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
 				var wordList = wordRepository
 					.GetAll(WordSpecifications.ContainsMorphemeId(morphemeId), false, w => w.Interpretations)
-					.OrderBy(w => w.Stem);
+					.OrderBy(w => w.Stem)
+					.Paging(1, maxCount, out totalCount);
+
+				return Mapper.Map<IEnumerable<Word>, IEnumerable<WordDto>>(wordList);
+			}
+		}
+
+		public IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId, string excludedWordId, int maxCount, out int totalCount)
+		{
+			using (var unitOfWork = DbContextFactory.CreateContext())
+			{
+				var spec = WordSpecifications.ContainsMorphemeId(morphemeId) & !WordSpecifications.IdEquals(excludedWordId);
+				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+				var wordList = wordRepository
+					.GetAll(spec, false, w => w.Interpretations)
+					.OrderBy(w => w.Stem)
+					.Paging(1, maxCount, out totalCount);
 
 				return Mapper.Map<IEnumerable<Word>, IEnumerable<WordDto>>(wordList);
 			}

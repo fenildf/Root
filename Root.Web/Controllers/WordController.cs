@@ -31,14 +31,14 @@ namespace Root.Web.Controllers
 			return JsonContent(new { result.Message, Word = result.Value });
 		}
 
-		public ActionResult Edit(string id)
+		public ActionResult Edit(string word)
 		{
-			var word = _searchService.GetWord(id);
+			var searchedWord = _searchService.GetWord(word);
 
-			if (word == null)
+			if (searchedWord == null)
 				return RedirectToAction("New", "Word");
 
-			return View(word);
+			return View(searchedWord);
 		}
 
 		[HttpPost]
@@ -83,14 +83,14 @@ namespace Root.Web.Controllers
 			return View(wordList);
 		}
 
-		public ActionResult Detail(string id)
+		public ActionResult Detail(string word)
 		{
-			var word = _searchService.GetWord(id);
+			var searchedWord = _searchService.GetWord(word);
 
-			if (word == null)
+			if (searchedWord == null)
 				return RedirectToAction("New", "Word");
 
-			return View(word);
+			return View(searchedWord);
 		}
     }
 }

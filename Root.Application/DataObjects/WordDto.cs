@@ -11,6 +11,11 @@ namespace Root.Application.DataObjects
 		public string Stem { get; set; }
 
 		/// <summary>
+		/// 音标
+		/// </summary>
+		public string Phonetic { get; set; }
+
+		/// <summary>
 		/// 词素列表
 		/// </summary>
 		public ICollection<WordMorphemeDto> Morphemes { get; set; }

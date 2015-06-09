@@ -64,7 +64,7 @@
 					alert(result.Message);
 
 					if (result.Word != null) {
-						window.location.href = "@Url.Action("Edit", "Word")/" + result.Word.Id;
+						window.location.href = "@Url.Action("Edit", "Word")?word=" + result.Word.Stem;
 					}
 				}
 			});

@@ -9,7 +9,7 @@
 
 <div class="clearfix">
 	<h4>
-		<a href="@Url.Action("Detail", "Word", new { Model.Id })" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
+		<a href="@Url.Action("Detail", "Word", new { word = Model.Stem })" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
 		&nbsp;&nbsp;
 		<strong>@Model.Stem</strong>
 	</h4>
@@ -74,7 +74,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="modal fade" id="selectMorphemeModal" tabindex="-1" role="dialog" aria-hidden="true">
 	<br /><br /><br /><br />
@@ -177,19 +176,17 @@
 				data: { morpheme: morpheme },
 				success: function (data) {
 					if (!data || data.length === 0) {
-						var addMorphemeTip =
-							"<li class=\"list-group-item\"> 未找到 <strong>" + morpheme + "</strong> 相关信息 &nbsp;" +
-								"	<a href=\"@Url.Action("New", "Morpheme")?morpheme=" + morpheme + "\" class=\"btn btn-xs btn-success\">添 加</button>" +
-								"</li>";
+						var addMorphemeTip = "<li class=\"list-group-item\"> 未找到 <strong>" + morpheme + "</strong> 相关信息 &nbsp;" +
+							"	<a href=\"@Url.Action("New", "Morpheme")?morpheme=" + morpheme + "\" class=\"btn btn-xs btn-success\">添 加</button>" +
+							"</li>";
 
 						morphemeList.append(addMorphemeTip);
 					} else {
 						for (var i = 0; i < data.length; i++) {
-							var item =
-								"<li class=\"list-group-item\">" +
-									"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + data[i].Id + "')\">添 加</button>" +
-									"	&nbsp;&nbsp;" + data[i].Value +
-									"</li>";
+							var item = "<li class=\"list-group-item\">" +
+								"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + data[i].Id + "')\">添 加</button>" +
+								"	&nbsp;&nbsp;" + data[i].Value +
+								"</li>";
 
 							morphemeList.append(item);
 						}

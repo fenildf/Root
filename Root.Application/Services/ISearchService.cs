@@ -15,11 +15,13 @@ namespace Root.Application.Services
 
 		#region Word
 
-		WordDto GetWord(string id);
+		WordDto GetWord(string wordStem);
 
 		IEnumerable<WordDto> GetWordListWithInterpretation(string fuzzyWord, int maxCount, out int totalCount);
 
-		IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId);
+		IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId, int maxCount, out int totalCount);
+
+		IEnumerable<WordDto> GetWordListByMorpheme(string morphemeId, string excludedWordId, int maxCount, out int totalCount);
 
 		#endregion
 	}
