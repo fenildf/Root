@@ -11,25 +11,29 @@
 	<h4><strong>@ViewBag.QueryWord</strong> 的查询结果</h4>
 
 	<hr />
-	
-	@foreach (var word in Model)
+
+	@if (Model.Any())
+	{
+		foreach (var word in Model)
+		{
+			<div class="well well-lg">
+				<p>
+					<strong>@word.Stem</strong>
+					<a href="@Url.Action("Detail", "Word", new { word.Id })">[详细]</a>
+				</p>
+
+				@foreach (var interpretation in word.Interpretations.OrderBy(i => i.Order))
+				{
+					<p>@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation</p>
+				}
+			</div>
+		}
+	}
+	else
 	{
 		<div class="well well-lg">
-			<p>
-				<strong>@word.Stem</strong>
-				<a href="@Url.Action("Detail", "Word", new { word.Id })" target="_blank">[详细]</a>
-			</p>
-
-			@foreach (var interpretation in word.Interpretations.OrderBy(i => i.Order))
-			{
-				<p>@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation</p>
-			}
+			未找到单词 &nbsp; <strong>@ViewBag.QueryWord</strong> &nbsp;&nbsp;
+			<a href="@Url.Action("New", "Word", new { word = ViewBag.QueryWord })" class="btn btn-xs btn-success">添 加</a>
 		</div>
 	}
 </div>
-
-@section scripts {
-	<script type="text/javascript">
-
-	</script>
-}

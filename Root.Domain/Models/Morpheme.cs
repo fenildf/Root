@@ -1,7 +1,6 @@
 ﻿using System;
 using Hangerd;
 using Hangerd.Entity;
-using Root.Domain.Utilities;
 
 namespace Root.Domain.Models
 {
@@ -54,11 +53,6 @@ namespace Root.Domain.Models
 		#endregion
 
 		#region Public Methods
-
-		public override void GenerateNewId()
-		{
-			Id = IdGenerator.Create<Morpheme>(string.Format("{0}_{1}", Standard, Type));
-		}
 
 		public void Validate()
 		{

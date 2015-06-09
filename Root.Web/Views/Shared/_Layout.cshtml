@@ -36,10 +36,10 @@
 							</li>
 						</ul>
 					
-						@using (Html.BeginForm("Search", "Word", FormMethod.Get, new { @class = "navbar-form navbar-right" }))
+						@using (Html.BeginForm("Search", "Word", FormMethod.Get, new { @class = "navbar-form navbar-right", onsubmit = "return checkInputNotEmpty('txtQueryInNav')" }))
 						{
 							<div class="input-group">
-								<input name="word" type="text" class="form-control" placeholder="输入要查找的单词" />
+								<input id="txtQueryInNav" name="word" type="text" class="form-control" placeholder="输入要查找的单词" />
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
 								</span>
@@ -70,5 +70,14 @@
 	<script src="http://resource.dfancy.cn/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
 
 	@RenderSection("scripts", false)
+	
+	<script type="text/javascript">
+		function checkInputNotEmpty (elementId) {
+			if (!$.trim($("#" + elementId).val()))
+				return false;
+
+			return true;
+		}
+	</script>
 </body>
 </html>

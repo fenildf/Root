@@ -24,7 +24,7 @@
 					@foreach (var item in Model.Morphemes.OrderBy(m => m.Order))
 					{
 						<li class="list-group-item">
-							<a href="@Url.Action("Detail", "Morpheme", new { id = item.Morpheme.Id })" target="_blank">
+							<a href="@Url.Action("Detail", "Morpheme", new { id = item.Morpheme.Id })">
 								<strong>@item.Morpheme.Standard</strong> @item.Morpheme.ToVariant() [ @item.Morpheme.Description ]
 							</a>
 							
