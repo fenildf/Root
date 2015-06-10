@@ -142,6 +142,7 @@
     <Content Include="Views\Word\Detail.cshtml" />
     <Content Include="Views\Morpheme\Edit.cshtml" />
     <Content Include="Views\Morpheme\Detail.cshtml" />
+    <Content Include="Views\Morpheme\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

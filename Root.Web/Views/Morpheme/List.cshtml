@@ -1,0 +1,27 @@
+﻿@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Hangerd.Mvc.ViewModels.PagedListModel<Root.Application.DataObjects.MorphemeDto>
+
+<div class="clearfix">
+	<h4>
+		<a class="btn btn-sm btn-success" href="@Url.Action("New", "Morpheme")"><span class="glyphicon glyphicon-plus"></span></a>
+		&nbsp;&nbsp;
+		<strong>词素列表</strong>
+	</h4>
+
+	<hr />
+
+	@foreach (var morpheme in Model.List)
+	{
+		<div class="col-md-3">
+			<h5>
+				<a href="@Url.Action("Detail", "Morpheme", new { id = morpheme.Id })">@morpheme.Standard (@morpheme.Description)</a>
+			</h5>
+		</div>
+	}
+</div>
+
+@PageHelper.BootstrapPager(Model.PageIndex, Model.PageSize, Model.TotalNumber,
+						p => Url.Action("List", "Morpheme", new { pageIndex = p }))

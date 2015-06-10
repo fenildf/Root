@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using Hangerd.Mvc;
+using Hangerd.Mvc.ViewModels;
 using Hangerd.Utility;
 using Root.Application.DataObjects;
 using Root.Application.Services;
@@ -10,6 +11,8 @@ namespace Root.Web.Controllers
 {
 	public class MorphemeController : HangerdController
 	{
+		private const int MorphemeListSize = 30;
+
 		private readonly ISearchService _searchService;
 		private readonly IMaintainService _maintainService;
 
@@ -19,6 +22,21 @@ namespace Root.Web.Controllers
 		{
 			_searchService = searchService;
 			_maintainService = maintainService;
+		}
+
+		public ActionResult List(int pageIndex = 1)
+		{
+			int totalCount;
+			var page = pageIndex < 1 ? 1 : pageIndex;
+			var tasks = _searchService.GetAllMorphemes(page, MorphemeListSize, out totalCount);
+
+			return View(new PagedListModel<MorphemeDto>
+			{
+				PageIndex = page,
+				PageSize = MorphemeListSize,
+				TotalNumber = totalCount,
+				List = tasks
+			});
 		}
 
 		public ActionResult New(string morpheme)

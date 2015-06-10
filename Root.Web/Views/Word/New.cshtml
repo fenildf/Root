@@ -7,7 +7,12 @@
 @model string
 
 <div class="clearfix">
-	<h4>添加单词</h4>
+	<h4>
+		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
+		<button id="btnSave" type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+		&nbsp;&nbsp;
+		<strong>添加单词</strong>
+	</h4>
 
 	<hr />
 
@@ -33,18 +38,12 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-1 col-md-4">
-				<button id="btnSubmit" type="button" class="btn btn-sm btn-success">添 加</button>
-			</div>
-		</div>
 	</form>
 </div>
 
 @section scripts {
 	<script type="text/javascript">
-		$("#btnSubmit").bind("click", function () {
+		$("#btnSave").bind("click", function () {
 			if (!$.trim($("#stem").val())) {
 				alert("词干不可为空");
 				return;

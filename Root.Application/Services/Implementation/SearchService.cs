@@ -23,6 +23,19 @@ namespace Root.Application.Services.Implementation
 
 		#region Morpheme
 
+		public IEnumerable<MorphemeDto> GetAllMorphemes(int pageIndex, int pageSize, out int totalCount)
+		{
+			using (var unitOfWork = DbContextFactory.CreateContext())
+			{
+				var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
+				var morphemes = morphemeRepository.GetAll(false)
+					.OrderBy(m => m.Standard)
+					.Paging(pageIndex, pageSize, out totalCount);
+
+				return Mapper.Map<IEnumerable<Morpheme>, IEnumerable<MorphemeDto>>(morphemes);
+			}
+		}
+
 		public MorphemeDto GetMorpheme(string id)
 		{
 			using (var unitOfWork = DbContextFactory.CreateContext())

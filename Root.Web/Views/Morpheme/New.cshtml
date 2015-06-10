@@ -7,7 +7,12 @@
 @model string
 
 <div class="clearfix">
-	<h4>添加词素</h4>
+	<h4>
+		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
+		<button id="btnSave" type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+		&nbsp;&nbsp;
+		<strong>添加词素</strong>
+	</h4>
 
 	<hr />
 
@@ -41,18 +46,12 @@
 				@Html.TextBox("Description", string.Empty, new { @class = "form-control" })
 			</div>
 		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-1 col-md-4">
-				<button id="btnSubmit" type="button" class="btn btn-sm btn-success">添 加</button>
-			</div>
-		</div>
 	</form>
 </div>
 
 @section scripts {
 	<script type="text/javascript">
-		$("#btnSubmit").bind("click", function () {
+		$("#btnSave").bind("click", function () {
 			if (!$.trim($("#Standard").val())) {
 				alert("词素本体不可为空");
 				return;

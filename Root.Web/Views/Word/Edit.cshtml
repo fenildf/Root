@@ -9,7 +9,8 @@
 
 <div class="clearfix">
 	<h4>
-		<a href="@Url.Action("Detail", "Word", new { word = Model.Stem })" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
+		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
+		<button id="btnSave" type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 		&nbsp;&nbsp;
 		<strong>@Model.Stem</strong>
 	</h4>

@@ -9,7 +9,8 @@
 
 <div class="clearfix">
 	<h4>
-		<a href="@Url.Action("Detail", "Morpheme", new { Model.Id })" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
+		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
+		<button id="btnSave" type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 		&nbsp;&nbsp;
 		<strong>@Model.Standard</strong>
 	</h4>
@@ -37,18 +38,12 @@
 				@Html.TextBoxFor(x => x.Description, new { @class = "form-control" })
 			</div>
 		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-1 col-md-4">
-				<button id="btnSubmit" type="button" class="btn btn-sm btn-primary">保 存</button>
-			</div>
-		</div>
 	</div>
 </div>
 
 @section scripts {
 	<script type="text/javascript">
-		$("#btnSubmit").bind("click", function () {
+		$("#btnSave").bind("click", function () {
 			if (!$("#Description").val()) {
 				alert("词素描述不可为空");
 				return;
@@ -67,6 +62,9 @@
 				},
 				success: function (result) {
 					alert(result.Message);
+
+					if (result.Success)
+						window.location.href = "@Url.Action("Detail", "Morpheme", new { id = Model.Id })";
 				}
 			});
 		});

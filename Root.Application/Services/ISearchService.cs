@@ -7,6 +7,8 @@ namespace Root.Application.Services
 	{
 		#region Morpheme
 
+		IEnumerable<MorphemeDto> GetAllMorphemes(int pageIndex, int pageSize, out int totalCount);
+
 		MorphemeDto GetMorpheme(string id);
 
 		IEnumerable<MorphemeDto> GetMorphemeList(string fuzzyMorpheme, int maxCount, out int totalCount);

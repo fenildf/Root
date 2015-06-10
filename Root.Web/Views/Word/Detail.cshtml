@@ -9,6 +9,7 @@
 
 <div class="clearfix">
 	<h4>
+		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
 		<a class="btn btn-sm btn-success" href="@Url.Action("Edit", "Word", new { word = Model.Stem })"><span class="glyphicon glyphicon-edit"></span></a>
 		&nbsp;&nbsp;
 		<strong>@Model.Stem</strong> [ @Model.Phonetic ]
@@ -58,7 +59,6 @@
 	</div>
 </div>
 
-
 <div class="modal fade" id="relatedWordListModal" tabindex="-1" role="dialog" aria-hidden="true">
 	<br /><br /><br /><br />
 	<div class="modal-dialog">
@@ -76,16 +76,16 @@
 
 @section scripts {
 	<script type="text/javascript">
-	function loadRelatedWordList(morphemeId) {
-		var relatedWordList = $("#relatedWordList").empty();
+		function loadRelatedWordList (morphemeId) {
+			var relatedWordList = $("#relatedWordList").empty();
 
-		$.ajax({
-			type: "POST",
-			dataType: "json",
-			url: "@Url.Action("GetRelatedWordList", "Morpheme")",
-			data: {
-				morphemeId: morphemeId,
-				excludedWordId: "@Model.Id"
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("GetRelatedWordList", "Morpheme")",
+				data: {
+					morphemeId: morphemeId,
+					excludedWordId: "@Model.Id"
 				},
 				success: function (data) {
 					if (!data || data.length === 0) {
@@ -104,16 +104,16 @@
 								"	<p>" +
 								"		<strong>" + data[i].Stem + "</strong>" +
 								"		<a href=\"@Url.Action("Detail", "Word")?word=" + data[i].Id + "\">[详细]</a>" +
-							"	</p>" + interpretation +
-							"</div>";
+								"	</p>" + interpretation +
+								"</div>";
 
-						relatedWordList.append(item);
+							relatedWordList.append(item);
+						}
 					}
-				}
 
-				$("#relatedWordListModal").modal("show");
-			}
-		});
-	}
+					$("#relatedWordListModal").modal("show");
+				}
+			});
+		}
 	</script>
 }

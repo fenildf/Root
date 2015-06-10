@@ -14,3 +14,48 @@
 		<option value="@value">@CommonTools.GetEnumDescription(value)</option>
 	}
 }
+
+@helper BootstrapPager(int currentPage, int pageSize, int totalNumber, Func<int, string> generatePageUrl)
+{
+	var totalPage = Decimal.ToInt32(totalNumber > 0 ? Math.Ceiling((decimal)totalNumber / pageSize) : 1);
+	var startPage = currentPage - 4 < 1 ? 1 : currentPage - 4;
+	var endPage = startPage + 9 > totalPage ? totalPage : startPage + 9;
+
+	<div>
+		<ul class="pagination navbar-right">
+			@if (currentPage <= 1)
+			{
+				currentPage = 1;
+
+				<li class="disabled"><a href='javascript:;'>上一页</a></li>
+			}
+			else
+			{
+				<li><a href='@generatePageUrl(currentPage - 1)'>上一页</a></li>
+			}
+
+			@for (var page = startPage; page <= endPage; page++)
+			{
+				if (page == currentPage)
+				{
+					<li class='active'><a href='javascript:;'>@page</a></li>
+				}
+				else
+				{
+					<li><a href='@generatePageUrl(page)'>@page</a></li>
+				}
+			}
+
+			@if (currentPage >= totalPage)
+			{
+				currentPage = totalPage;
+
+				<li class="disabled"><a href='javascript:;'>下一页</a></li>
+			}
+			else
+			{
+				<li><a href='@generatePageUrl(currentPage + 1)'>下一页</a></li>
+			}
+		</ul>
+	</div>
+}
