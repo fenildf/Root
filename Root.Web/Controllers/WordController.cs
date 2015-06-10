@@ -24,9 +24,9 @@ namespace Root.Web.Controllers
         }
 
 		[HttpPost]
-		public ActionResult Add(string stem, WordInterpretationDto interpretationDto)
+		public ActionResult Add(string stem)
 		{
-			var result = _maintainService.AddWord(stem, interpretationDto);
+			var result = _maintainService.AddWord(stem);
 
 			return JsonContent(new { result.Message, Word = result.Value });
 		}

@@ -15,7 +15,7 @@ namespace Root.Application.Services
 
 		#region Word
 
-		HangerdResult<WordDto> AddWord(string stem, WordInterpretationDto interpretationDto);
+		HangerdResult<WordDto> AddWord(string stem);
 
 		HangerdResult<bool> ModifyWord(string wordId, WordDto wordDto);
 

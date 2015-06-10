@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Hangerd;
 using Hangerd.Validation;
 using Root.Application.DataObjects;
@@ -64,16 +65,22 @@ namespace Root.Application.Services.Implementation
 
 		#region Word
 
-		public HangerdResult<WordDto> AddWord(string stem, WordInterpretationDto interpretationDto)
+		public HangerdResult<WordDto> AddWord(string stem)
 		{
 			return TryOperate(() =>
 			{
+				if (string.IsNullOrWhiteSpace(stem))
+					throw new HangerdException("词干不可为空");
+
 				using (var unitOfWork = DbContextFactory.CreateContext())
 				{
 					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
-					var word = new Word(
-						stem,
-						new WordInterpretation((PartOfSpeech) interpretationDto.PartOfSpeech, interpretationDto.Interpretation));
+					var word = wordRepository.GetWordByStem(stem, false);
+
+					if (word != null)
+						throw new HangerdException("该单词已存在");
+
+					word = new Word(stem);
 
 					wordRepository.Add(word);
 

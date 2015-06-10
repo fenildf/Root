@@ -7,41 +7,41 @@ namespace Root.Application.DataObjects
 		/// <summary>
 		/// 名词
 		/// </summary>
-		[Description("n.")] Noun = 1,
+		[Description("n.")] n = 1,
 
 		/// <summary>
 		/// 动词
 		/// </summary>
-		[Description("v.")] Verb = 2,
+		[Description("v.")] v = 2,
 
 		/// <summary>
 		/// 及物动词
 		/// </summary>
-		[Description("vt.")] TransitiveVerb = 3,
+		[Description("vt.")] vt = 3,
 
 		/// <summary>
 		/// 不及物动词
 		/// </summary>
-		[Description("vi.")] IntransitiveVerb = 4,
+		[Description("vi.")] vi = 4,
 
 		/// <summary>
 		/// 形容词
 		/// </summary>
-		[Description("adj.")] Adjective = 5,
+		[Description("adj.")] adj = 5,
 
 		/// <summary>
 		/// 副词
 		/// </summary>
-		[Description("adv.")] Adverb = 6,
+		[Description("adv.")] adv = 6,
 
 		/// <summary>
 		/// 介词
 		/// </summary>
-		[Description("prep.")] Preposition = 7,
+		[Description("prep.")] prep = 7,
 
 		/// <summary>
 		/// 代词
 		/// </summary>
-		[Description("pron.")] Pronoun = 8
+		[Description("pron.")] pron = 8
 	}
 }

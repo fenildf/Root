@@ -2,17 +2,10 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using Root.Application.DataObjects
-
 @model string
 
 <div class="clearfix">
-	<h4>
-		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
-		<button id="btnSave" type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-		&nbsp;&nbsp;
-		<strong>添加单词</strong>
-	</h4>
+	<h4><strong>添加单词</strong></h4>
 
 	<hr />
 
@@ -20,21 +13,11 @@
 		<div class="form-group">
 			<label class="col-md-1 control-label">词　干:</label>
 			<div class="col-md-4">
-				@Html.TextBox("stem", Model, new { @class = "form-control" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="col-md-1 control-label">释　义:</label>
-			<div class="col-md-4">
 				<div class="input-group">
-					<select name="PartOfSpeech" class="form-control">
-						@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
-					</select>
-					<span class="input-group-addon">
-						<span class="glyphicon glyphicon-pencil"></span>
+					@Html.TextBox("stem", Model, new { @class = "form-control" })
+					<span class="input-group-btn">
+						<button id="btnSave" type="button" class="btn btn-success">添 加</button>
 					</span>
-					@Html.TextBox("Interpretation", string.Empty, new { @class = "form-control" })
 				</div>
 			</div>
 		</div>
@@ -46,11 +29,6 @@
 		$("#btnSave").bind("click", function () {
 			if (!$.trim($("#stem").val())) {
 				alert("词干不可为空");
-				return;
-			}
-
-			if (!$("#Interpretation").val()) {
-				alert("释义内容不可为空");
 				return;
 			}
 

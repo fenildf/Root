@@ -80,7 +80,7 @@ namespace Root.Application.Services.Implementation
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
 				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
-				var word = wordRepository.Get(WordSpecifications.StemEquals(wordStem), false, w => w.Morphemes, w => w.Interpretations);
+				var word = wordRepository.GetWordByStem(wordStem, false, w => w.Morphemes, w => w.Interpretations);
 
 				return Mapper.Map<Word, WordDto>(word);
 			}

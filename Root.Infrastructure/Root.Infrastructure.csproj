@@ -56,10 +56,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrapper\RegisterServiceTask.cs" />
     <Compile Include="IRootDbContext.cs" />
     <Compile Include="IRootDbContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceBase.cs" />
+    <Compile Include="TranlateProxy\ITranslateService.cs" />
+    <Compile Include="TranlateProxy\TranslateResult.cs" />
+    <Compile Include="TranlateProxy\TranslateService.cs" />
+    <Compile Include="TranlateProxy\RequestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

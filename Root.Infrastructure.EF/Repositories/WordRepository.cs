@@ -1,7 +1,10 @@
-﻿using Hangerd.EntityFramework;
+﻿using System;
+using System.Linq.Expressions;
+using Hangerd.EntityFramework;
 using Hangerd.Repository;
 using Root.Domain.Models;
 using Root.Domain.Repositories;
+using Root.Domain.Specifications;
 
 namespace Root.Infrastructure.EF.Repositories
 {
@@ -10,6 +13,13 @@ namespace Root.Infrastructure.EF.Repositories
 		public WordRepository(IRepositoryContext context)
 			: base(context)
 		{
+		}
+
+		public Word GetWordByStem(string stem, bool tracking, params Expression<Func<Word, object>>[] eagerLoadingProperties)
+		{
+			var spec = WordSpecifications.StemEquals(stem);
+
+			return Get(spec, tracking, eagerLoadingProperties);
 		}
 	}
 }

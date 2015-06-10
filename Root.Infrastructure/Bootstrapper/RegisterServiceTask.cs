@@ -1,11 +1,9 @@
 ﻿using Hangerd.Bootstrapper;
-using Hangerd.Event;
 using Hangerd.Extensions;
 using Microsoft.Practices.Unity;
-using Root.Domain.Events;
-using Root.Domain.Events.Handlers;
+using Root.Infrastructure.TranlateProxy;
 
-namespace Root.Domain.Bootstrapper
+namespace Root.Infrastructure.Bootstrapper
 {
 	public class RegisterServiceTask : RegisterServiceBootstrapperTask
 	{
@@ -15,10 +13,8 @@ namespace Root.Domain.Bootstrapper
 
 		public override void Execute()
 		{
-			//domain services
-
-			//domain events
-			_container.RegisterMultipleTypesAsPerResolve<IDomainEventHandler<WordCreatedEvent>, WordCreatedEventHandler>();
+			//infrastructure services
+			_container.RegisterTypeAsSingleton<ITranslateService, TranslateService>();
 		}
 	}
 }

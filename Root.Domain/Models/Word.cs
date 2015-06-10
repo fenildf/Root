@@ -2,6 +2,8 @@
 using System.Linq;
 using Hangerd;
 using Hangerd.Entity;
+using Hangerd.Event;
+using Root.Domain.Events;
 using Root.Domain.Utilities;
 
 namespace Root.Domain.Models
@@ -43,16 +45,15 @@ namespace Root.Domain.Models
 		{
 		}
 
-		public Word(string stem, WordInterpretation defaultInterpretation)
+		public Word(string stem)
 		{
 			if (string.IsNullOrWhiteSpace(stem))
 				throw new HangerdException("词干不可为空");
 
-			if (defaultInterpretation == null)
-				throw new HangerdException("默认释义不可为空");
-
 			Stem = stem;
-			Interpretations = new List<WordInterpretation> { defaultInterpretation };
+			Interpretations = new List<WordInterpretation>();
+
+			DomainEvent.Publish(new WordCreatedEvent(this));
 		}
 
 		#endregion
