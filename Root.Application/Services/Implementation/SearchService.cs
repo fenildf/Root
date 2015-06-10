@@ -74,6 +74,9 @@ namespace Root.Application.Services.Implementation
 
 		public WordDto GetWord(string wordStem)
 		{
+			if (string.IsNullOrWhiteSpace(wordStem))
+				return null;
+
 			using (var unitOfWork = DbContextFactory.CreateContext())
 			{
 				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
