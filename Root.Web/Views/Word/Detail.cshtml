@@ -10,7 +10,7 @@
 <div class="clearfix">
 	<h4>
 		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
-		<a class="btn btn-sm btn-success" href="@Url.Action("Edit", "Word", new { word = Model.Stem })"><span class="glyphicon glyphicon-edit"></span></a>
+		<a class="btn btn-sm btn-success" href="@Url.Action("Modify", "Word", new { word = Model.Stem })"><span class="glyphicon glyphicon-edit"></span></a>
 		&nbsp;&nbsp;
 		<strong>@Model.Stem</strong> [ @Model.Phonetic ]
 	</h4>
@@ -50,7 +50,13 @@
 				</li>
 			}
 		</ul>
-
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">例　句:</div>
+		<div class="panel-body">
+			@Model.ExampleSentence
+		</div>
 	</div>
 </div>
 
@@ -101,7 +107,7 @@
 							var item = "<div class=\"well well-sm\">" +
 								"	<p>" +
 								"		<strong>" + data[i].Stem + "</strong>" +
-								"		<a href=\"@Url.Action("Detail", "Word")?word=" + data[i].Id + "\">[详细]</a>" +
+								"		<a href=\"@Url.Action("Detail", "Word", new {word = string.Empty})/" + data[i].Stem + "\">[详细]</a>" +
 								"	</p>" + interpretation +
 								"</div>";
 

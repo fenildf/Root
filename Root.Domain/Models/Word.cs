@@ -118,6 +118,16 @@ namespace Root.Domain.Models
 				morpheme.ModifyOrder(morpheme.Order - 1);
 		}
 
+		public void ModifyPhonetic(string phonetic)
+		{
+			Phonetic = phonetic;
+		}
+
+		public void ModifyExampleSentence(string exampleSentence)
+		{
+			ExampleSentence = exampleSentence;
+		}
+
 		#endregion
 	}
 }

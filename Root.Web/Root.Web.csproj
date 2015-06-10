@@ -137,10 +137,10 @@
     <Content Include="Views\Word\New.cshtml" />
     <Content Include="App_Code\PageHelper.cshtml" />
     <Content Include="Views\Shared\_Error.cshtml" />
-    <Content Include="Views\Word\Edit.cshtml" />
+    <Content Include="Views\Word\Modify.cshtml" />
     <Content Include="Views\Word\Search.cshtml" />
     <Content Include="Views\Word\Detail.cshtml" />
-    <Content Include="Views\Morpheme\Edit.cshtml" />
+    <Content Include="Views\Morpheme\Modify.cshtml" />
     <Content Include="Views\Morpheme\Detail.cshtml" />
     <Content Include="Views\Morpheme\List.cshtml" />
     <None Include="Web.Debug.config">

@@ -17,6 +17,8 @@ namespace Root.Application.Services
 
 		HangerdResult<WordDto> AddWord(string stem, WordInterpretationDto interpretationDto);
 
+		HangerdResult<bool> ModifyWord(string wordId, WordDto wordDto);
+
 		HangerdResult<bool> AddWordInterpretation(string wordId, WordInterpretationDto interpretationDto);
 
 		HangerdResult<bool> RemoveWordInterpretation(string wordId, string interpretationId);

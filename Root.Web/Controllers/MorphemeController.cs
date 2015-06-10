@@ -52,16 +52,6 @@ namespace Root.Web.Controllers
 			return OperationJsonResult(result);
 		}
 
-		public ActionResult Edit(string id)
-		{
-			var morpheme = _searchService.GetMorpheme(id);
-
-			if (morpheme == null)
-				return RedirectToAction("New", "Morpheme");
-
-			return View(morpheme);
-		}
-
 		public ActionResult Detail(string id)
 		{
 			var morpheme = _searchService.GetMorpheme(id);
@@ -78,8 +68,18 @@ namespace Root.Web.Controllers
 			});
 		}
 
+		public ActionResult Modify(string id)
+		{
+			var morpheme = _searchService.GetMorpheme(id);
+
+			if (morpheme == null)
+				return RedirectToAction("New", "Morpheme");
+
+			return View(morpheme);
+		}
+
 		[HttpPost]
-		public ActionResult Modify(string id, MorphemeDto morphemeDto)
+		public ActionResult Save(string id, MorphemeDto morphemeDto)
 		{
 			var result = _maintainService.ModifyMorpheme(id, morphemeDto);
 

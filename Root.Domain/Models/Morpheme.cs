@@ -56,13 +56,19 @@ namespace Root.Domain.Models
 
 		public void Validate()
 		{
-			if (string.IsNullOrWhiteSpace(Description))
-				throw new HangerdException("词素描述不可为空");
+			
 		}
 
-		public void Modify(string variant, string description)
+		public void ModifyVariant(string variant)
 		{
 			Variant = variant;
+		}
+
+		public void ModifyDescription(string description)
+		{
+			if (string.IsNullOrWhiteSpace(description))
+				throw new HangerdException("词素描述不可为空");
+
 			Description = description;
 		}
 

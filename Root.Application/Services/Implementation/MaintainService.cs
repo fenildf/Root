@@ -50,7 +50,8 @@ namespace Root.Application.Services.Implementation
 					var morphemeRepository = unitOfWork.GetRepository<IMorphemeRepository>();
 					var morpheme = morphemeRepository.Get(morphemeId, true);
 
-					morpheme.Modify(morphemeDto.Variant, morphemeDto.Description);
+					morpheme.ModifyVariant(morphemeDto.Variant);
+					morpheme.ModifyDescription(morphemeDto.Description);
 
 					morphemeRepository.Update(morpheme);
 
@@ -69,7 +70,6 @@ namespace Root.Application.Services.Implementation
 			{
 				using (var unitOfWork = DbContextFactory.CreateContext())
 				{
-					//todo: morphemes
 					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
 					var word = new Word(
 						stem,
@@ -80,6 +80,27 @@ namespace Root.Application.Services.Implementation
 					unitOfWork.Commit();
 
 					return Mapper.Map<Word, WordDto>(word);
+				}
+			});
+		}
+
+		public HangerdResult<bool> ModifyWord(string wordId, WordDto wordDto)
+		{
+			return TryOperate(() =>
+			{
+				using (var unitOfWork = DbContextFactory.CreateContext())
+				{
+					var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+					var word = wordRepository.Get(wordId, true, w => w.Interpretations);
+
+					Requires.NotNull(word, "单词信息不存在");
+
+					word.ModifyPhonetic(wordDto.Phonetic);
+					word.ModifyExampleSentence(wordDto.ExampleSentence);
+
+					wordRepository.Update(word);
+
+					unitOfWork.Commit();
 				}
 			});
 		}

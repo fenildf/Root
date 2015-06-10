@@ -31,7 +31,7 @@ namespace Root.Web.Controllers
 			return JsonContent(new { result.Message, Word = result.Value });
 		}
 
-		public ActionResult Edit(string word)
+		public ActionResult Detail(string word)
 		{
 			var searchedWord = _searchService.GetWord(word);
 
@@ -39,6 +39,24 @@ namespace Root.Web.Controllers
 				return RedirectToAction("New", "Word");
 
 			return View(searchedWord);
+		}
+
+		public ActionResult Modify(string word)
+		{
+			var searchedWord = _searchService.GetWord(word);
+
+			if (searchedWord == null)
+				return RedirectToAction("New", "Word");
+
+			return View(searchedWord);
+		}
+
+		[HttpPost]
+		public ActionResult Save(string id, WordDto wordDto)
+		{
+			var result = _maintainService.ModifyWord(id, wordDto);
+
+			return OperationJsonResult(result);
 		}
 
 		[HttpPost]
@@ -81,16 +99,6 @@ namespace Root.Web.Controllers
 			ViewBag.QueryWord = word;
 
 			return View(wordList);
-		}
-
-		public ActionResult Detail(string word)
-		{
-			var searchedWord = _searchService.GetWord(word);
-
-			if (searchedWord == null)
-				return RedirectToAction("New", "Word");
-
-			return View(searchedWord);
 		}
     }
 }

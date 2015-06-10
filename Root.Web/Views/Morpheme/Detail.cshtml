@@ -9,7 +9,7 @@
 <div class="clearfix">
 	<h4>
 		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
-		<a class="btn btn-sm btn-success" href="@Url.Action("Edit", "Morpheme", new { Model.Morpheme.Id })"><span class="glyphicon glyphicon-edit"></span></a>
+		<a class="btn btn-sm btn-success" href="@Url.Action("Modify", "Morpheme", new { Model.Morpheme.Id })"><span class="glyphicon glyphicon-edit"></span></a>
 		&nbsp;&nbsp;
 		<strong>@Model.Morpheme.Standard</strong> @Model.Morpheme.ToVariant() [@CommonTools.GetEnumDescription(Model.Morpheme.Type)]
 	</h4>
