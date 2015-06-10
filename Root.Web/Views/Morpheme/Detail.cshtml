@@ -11,51 +11,33 @@
 		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
 		<a class="btn btn-sm btn-success" href="@Url.Action("Edit", "Morpheme", new { Model.Morpheme.Id })"><span class="glyphicon glyphicon-edit"></span></a>
 		&nbsp;&nbsp;
-		<strong>@Model.Morpheme.Standard</strong>
+		<strong>@Model.Morpheme.Standard</strong> @Model.Morpheme.ToVariant() [@CommonTools.GetEnumDescription(Model.Morpheme.Type)]
 	</h4>
 
 	<hr />
 
-	<div class="form-horizontal">
-		<div class="form-group">
-			<label class="col-md-1 control-label">类　型:</label>
-			<div class="col-md-4">
-				<p class="form-control-static">@CommonTools.GetEnumDescription(Model.Morpheme.Type)</p>
-			</div>
-		</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">描述:</div>
+		<div class="panel-body">@Model.Morpheme.Description</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">相关词汇:</div>
+		<ul class="list-group">
+			@foreach (var word in Model.RelatedWords)
+			{
+				<li class="list-group-item">
+					<p>
+						<strong>@word.Stem</strong>
+						<a href="@Url.Action("Detail", "Word", new { word = word.Stem })">[详细]</a>
+					</p>
 
-		<div class="form-group">
-			<label class="col-md-1 control-label">变　体:</label>
-			<div class="col-md-4">
-				<p class="form-control-static">@Model.Morpheme.Variant</p>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="col-md-1 control-label">描　述:</label>
-			<div class="col-md-4">
-				<p class="form-control-static">@Model.Morpheme.Description</p>
-			</div>
-		</div>
-		
-		<div class="form-group">
-			<label class="col-md-1 control-label">相　关:</label>
-			<div class="col-md-4">
-				@foreach (var word in Model.RelatedWords)
-				{
-					<div class="well well-lg">
-						<p>
-							<strong>@word.Stem</strong>
-							<a href="@Url.Action("Detail", "Word", new { word = word.Stem })">[详细]</a>
-						</p>
-
-						@foreach (var interpretation in word.Interpretations.OrderBy(i => i.Order))
-						{
-							<p>@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation</p>
-						}
-					</div>
-				}
-			</div>
-		</div>
+					@foreach (var interpretation in word.Interpretations.OrderBy(i => i.Order))
+					{
+						<p>@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation</p>
+					}
+				</li>
+			}
+		</ul>
 	</div>
 </div>

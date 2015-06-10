@@ -12,19 +12,12 @@
 		<button type="button" class="btn btn-sm btn-default" onclick="window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span></button>
 		<button id="btnSave" type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 		&nbsp;&nbsp;
-		<strong>@Model.Standard</strong>
+		<strong>@Model.Standard</strong> [@CommonTools.GetEnumDescription(Model.Type)]
 	</h4>
 
 	<hr />
 
 	<div class="form-horizontal">
-		<div class="form-group">
-			<label class="col-md-1 control-label">类　型:</label>
-			<div class="col-md-4">
-				<p class="form-control-static">@CommonTools.GetEnumDescription(Model.Type)</p>
-			</div>
-		</div>
-
 		<div class="form-group">
 			<label class="col-md-1 control-label">变　体:</label>
 			<div class="col-md-4">

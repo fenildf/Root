@@ -16,51 +16,45 @@
 	</h4>
 
 	<hr />
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">词　素:</div>
+		<ul class="list-group">
+			@foreach (var item in Model.Morphemes.OrderBy(m => m.Order))
+			{
+				<li class="list-group-item">
+					<a href="@Url.Action("Detail", "Morpheme", new { id = item.Morpheme.Id })">
+						<strong>@item.Morpheme.Standard</strong> @item.Morpheme.ToVariant() [ @item.Morpheme.Description ]
+					</a>
 
-	<div class="form-horizontal">
-		<div class="form-group">
-			<label class="col-md-1 control-label">词　素:</label>
-			<div class="col-md-4">
-				<ul class="list-group">
-					@foreach (var item in Model.Morphemes.OrderBy(m => m.Order))
+					@if (item.Morpheme.Type == MorphemeTypeDto.Root)
 					{
-						<li class="list-group-item">
-							<a href="@Url.Action("Detail", "Morpheme", new { id = item.Morpheme.Id })">
-								<strong>@item.Morpheme.Standard</strong> @item.Morpheme.ToVariant() [ @item.Morpheme.Description ]
-							</a>
-							
-							@if (item.Morpheme.Type == MorphemeTypeDto.Root)
-							{
-								<span class="glyphicon glyphicon-flag"></span>
+						<span class="glyphicon glyphicon-flag"></span>
 
-								<button type="button" class="btn btn-xs btn-default pull-right" onclick="loadRelatedWordList('@item.Morpheme.Id')">
-									<span class="glyphicon glyphicon-menu-right"></span>
-								</button>
-							}
-						</li>
+						<button type="button" class="btn btn-xs btn-default pull-right" onclick="loadRelatedWordList('@item.Morpheme.Id')">
+							<span class="glyphicon glyphicon-menu-right"></span>
+						</button>
 					}
-				</ul>
-			</div>
-		</div>
+				</li>
+			}
+		</ul>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">释　义:</div>
+		<ul class="list-group">
+			@foreach (var interpretation in Model.Interpretations.OrderBy(i => i.Order))
+			{
+				<li class="list-group-item">
+					@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation
+				</li>
+			}
+		</ul>
 
-		<div class="form-group">
-			<label class="col-md-1 control-label">释　义:</label>
-			<div class="col-md-4">
-				<ul class="list-group">
-					@foreach (var interpretation in Model.Interpretations.OrderBy(i => i.Order))
-					{
-						<li class="list-group-item">
-							@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation
-						</li>
-					}
-				</ul>
-			</div>
-		</div>
 	</div>
 </div>
 
 <div class="modal fade" id="relatedWordListModal" tabindex="-1" role="dialog" aria-hidden="true">
-	<br /><br /><br /><br />
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -79,6 +73,10 @@
 		function loadRelatedWordList (morphemeId) {
 			var relatedWordList = $("#relatedWordList").empty();
 
+			relatedWordList.append("<div class=\"well well-sm\">加载中..</div>");
+
+			$("#relatedWordListModal").modal("show");
+
 			$.ajax({
 				type: "POST",
 				dataType: "json",
@@ -88,10 +86,10 @@
 					excludedWordId: "@Model.Id"
 				},
 				success: function (data) {
-					if (!data || data.length === 0) {
-						var noWordTip = "<div class=\"well well-sm\">暂无相关词汇</div>";
+					relatedWordList = $("#relatedWordList").empty();
 
-						relatedWordList.append(noWordTip);
+					if (!data || data.length === 0) {
+						relatedWordList.append("<div class=\"well well-sm\">暂无相关词汇</div>");
 					} else {
 						for (var i = 0; i < data.length; i++) {
 							var interpretation = "";
@@ -110,8 +108,6 @@
 							relatedWordList.append(item);
 						}
 					}
-
-					$("#relatedWordListModal").modal("show");
 				}
 			});
 		}
