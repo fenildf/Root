@@ -64,7 +64,7 @@ namespace Root.Web.Controllers
 			return View(new MorphemeDetailModel
 			{
 				Morpheme = morpheme,
-				RelatedWords = _searchService.GetWordListByMorpheme(id, 20, out totalCount)
+				RelatedWords = _searchService.GetWordListByMorpheme(id, 15, out totalCount)
 			});
 		}
 
@@ -104,7 +104,7 @@ namespace Root.Web.Controllers
 		public ActionResult GetRelatedWordList(string morphemeId, string excludedWordId)
 		{
 			int totalCount;
-			var words = _searchService.GetWordListByMorpheme(morphemeId, excludedWordId, 20, out totalCount)
+			var words = _searchService.GetWordListByMorpheme(morphemeId, excludedWordId, 11, out totalCount)
 				.Select(word => new
 				{
 					word.Id,

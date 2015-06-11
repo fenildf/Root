@@ -30,11 +30,11 @@
 					@if (item.Morpheme.Type == MorphemeTypeDto.Root)
 					{
 						<span class="glyphicon glyphicon-flag"></span>
-
-						<button type="button" class="btn btn-xs btn-default pull-right" onclick="loadRelatedWordList('@item.Morpheme.Id')">
-							<span class="glyphicon glyphicon-menu-right"></span>
-						</button>
 					}
+					
+					<button type="button" class="btn btn-xs btn-default pull-right" onclick="loadRelatedWordList('@item.Morpheme.Id')">
+						<span class="glyphicon glyphicon-menu-right"></span>
+					</button>
 				</li>
 			}
 		</ul>
