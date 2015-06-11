@@ -50,7 +50,7 @@ namespace Root.Domain.Models
 			if (string.IsNullOrWhiteSpace(stem))
 				throw new HangerdException("词干不可为空");
 
-			Stem = stem;
+			Stem = stem.Trim().ToLower();
 			Interpretations = new List<WordInterpretation>();
 
 			DomainEvent.Publish(new WordCreatedEvent(this));

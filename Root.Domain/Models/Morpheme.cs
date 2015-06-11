@@ -44,7 +44,7 @@ namespace Root.Domain.Models
 			if (!Enum.IsDefined(typeof (MorphemeType), type))
 				throw new HangerdException("未知词素类型");
 
-			Standard = standard.ToLower();
+			Standard = standard.Trim().ToLower();
 			Variant = variant;
 			Description = description;
 			Type = type;
