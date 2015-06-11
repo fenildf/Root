@@ -20,7 +20,7 @@
 	<div class="form-horizontal">
 		<div class="form-group">
 			<label class="col-md-1 control-label">词　素:</label>
-			<div class="col-md-4">
+			<div class="col-md-5">
 				@if (Model.Morphemes.Any())
 				{
 					<ul class="list-group">
@@ -33,55 +33,65 @@
 								{
 									<span class="glyphicon glyphicon-flag"></span>
 								}
-								
-								<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeMorphemeForWord('@item.Morpheme.Id')">删 除</button>
+
+								<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeMorphemeForWord('@item.Morpheme.Id')">
+									<span class="glyphicon glyphicon-minus"></span>
+								</button>
 							</li>
 						}
+						<li class="list-group-item text-right">
+							<button id="btnShowSelectMorphemeModal" type="button" class="btn btn-sm btn-default">
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+						</li>
 					</ul>
 				}
-				
-				<button id="btnShowSelectMorphemeModal" type="button" class="btn btn-default">查 找</button>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-md-1 control-label">释　义:</label>
-			<div class="col-md-4">
+			<div class="col-md-5">
 				<ul class="list-group">
 					@foreach (var interpretation in Model.Interpretations.OrderBy(i => i.Order))
 					{
 						<li class="list-group-item">
 							@CommonTools.GetEnumDescription(interpretation.PartOfSpeech) @interpretation.Interpretation
-							<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeInterpretation('@interpretation.Id')">删 除</button>
+							<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeInterpretation('@interpretation.Id')">
+								<span class="glyphicon glyphicon-minus"></span>
+							</button>
 						</li>
 					}
+					<li class="list-group-item">
+						<div class="input-group input-group-sm">
+							<select id="selectPartOfSpeech" class="form-control">
+								@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
+							</select>
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</span>
+							<input id="txtInterpretation" type="text" class="form-control" />
+							<span class="input-group-btn">
+								<button id="btnAddInterpretation" type="button" class="btn btn-success">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+							</span>
+						</div>
+					</li>
 				</ul>
-
-				<div class="input-group">
-					<select id="selectPartOfSpeech" class="form-control">
-						@PageHelper.CreateOptionsForEnum(typeof(PartOfSpeechDto))
-					</select>
-					<span class="input-group-addon">
-						<span class="glyphicon glyphicon-pencil"></span>
-					</span>
-					<input id="txtInterpretation" type="text" class="form-control" />
-					<span class="input-group-btn">
-						<button id="btnAddInterpretation" type="button" class="btn btn-success">添 加</button>
-					</span>
-				</div>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label class="col-md-1 control-label">音　标:</label>
-			<div class="col-md-4">
+			<div class="col-md-5">
 				@Html.TextBoxFor(x => x.Phonetic, new { @class = "form-control" })
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-md-1 control-label">例　句:</label>
-			<div class="col-md-4">
+			<div class="col-md-5">
 				@Html.TextAreaFor(x => x.ExampleSentence, new { @class = "form-control", rows = 3 })
 			</div>
 		</div>
@@ -111,6 +121,46 @@
 					</div>
 					<ul id="morphemeList" class="list-group"></ul>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="addMorphemeModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">添加词素</h4>
+			</div>
+			<div class="modal-body">
+				<form id="addMorphemeForm" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-md-2 control-label">本　体:</label>
+						<div class="col-md-6">
+							@Html.TextBox("Standard", string.Empty, new { @class = "form-control" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label">类　型:</label>
+						<div class="col-md-6">
+							<select name="Type" class="form-control">
+								@PageHelper.CreateOptionsForEnum(typeof(MorphemeTypeDto))
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label">描　述:</label>
+						<div class="col-md-6">
+							@Html.TextBox("Description", string.Empty, new { @class = "form-control" })
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="btnAddMorpheme" type="button" class="btn btn-success">添 加</button>
 			</div>
 		</div>
 	</div>
@@ -172,6 +222,10 @@
 		}
 
 		$("#btnSearchMorpheme").bind("click", function () {
+			getSearchedMorphemeList();
+		});
+
+		function getSearchedMorphemeList () {
 			var morpheme = $.trim($("#txtMorpheme").val());
 
 			if (!morpheme) {
@@ -187,27 +241,27 @@
 				url: "@Url.Action("GetMorphemeList", "Morpheme")",
 				data: { morpheme: morpheme },
 				success: function (data) {
-					if (!data || data.length === 0) {
-						var addMorphemeTip = "<li class=\"list-group-item\"> 未找到 <strong>" + morpheme + "</strong> 相关信息 &nbsp;" +
-							"	<a href=\"@Url.Action("New", "Morpheme")?morpheme=" + morpheme + "\" class=\"btn btn-xs btn-success\">添 加</button>" +
-							"</li>";
-
-						morphemeList.append(addMorphemeTip);
-					} else {
+					if (data) {
 						for (var i = 0; i < data.length; i++) {
 							var item = "<li class=\"list-group-item\">" +
-								"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + data[i].Id + "')\">添 加</button>" +
+								"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + data[i].Id + "')\"><span class=\"glyphicon glyphicon-plus\"></span></button>" +
 								"	&nbsp;&nbsp;" + data[i].Value +
 								"</li>";
 
 							morphemeList.append(item);
 						}
 					}
+
+					var addMorphemeTip = "<li class=\"list-group-item text-center\">" +
+						"	<button type=\"button\" class=\"btn btn-sm btn-success\" onclick=\"showAddMorphemeModal()\">将 <strong>“" + morpheme + "”</strong> 添加为新的词素</button>" +
+						"</li>";
+
+					morphemeList.append(addMorphemeTip);
 				}
 			});
-		});
+		}
 
-		function addMorphemeForWord(morphemeId) {
+		function addMorphemeForWord (morphemeId) {
 			$.ajax({
 				type: "POST",
 				dataType: "json",
@@ -267,6 +321,42 @@
 						window.location.href = "@Url.Action("Detail", "Word", new { word = Model.Stem })";
 				}
 			});
+		});
+
+		function showAddMorphemeModal () {
+			$("#selectMorphemeModal").modal("hide");
+			$("#addMorphemeModal").modal("show");
+			$("#Standard").val($("#txtMorpheme").val());
+		}
+
+		$("#btnAddMorpheme").bind("click", function () {
+			if (!$.trim($("#Standard").val())) {
+				alert("词素本体不可为空");
+				return;
+			}
+
+			if (!$("#Description").val()) {
+				alert("词素描述不可为空");
+				return;
+			}
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "@Url.Action("Add", "Morpheme")",
+				data: $("#addMorphemeForm").serialize(),
+				success: function (result) {
+					alert(result.Message);
+
+					if (result.Success) {
+						$("#addMorphemeModal").modal("hide");
+						$("#selectMorphemeModal").modal("show");
+
+						getSearchedMorphemeList();
+					}
+				}
+			});
+
 		});
 	</script>
 }

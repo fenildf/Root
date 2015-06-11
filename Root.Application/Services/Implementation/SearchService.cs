@@ -72,6 +72,16 @@ namespace Root.Application.Services.Implementation
 
 		#region Word
 
+		public int GetTotalNumberOfWords()
+		{
+			using (var unitOfWork = DbContextFactory.CreateContext())
+			{
+				var wordRepository = unitOfWork.GetRepository<IWordRepository>();
+
+				return wordRepository.GetTotalNumberOfWords();
+			}
+		}
+
 		public WordDto GetWord(string wordStem)
 		{
 			if (string.IsNullOrWhiteSpace(wordStem))

@@ -7,6 +7,8 @@ namespace Root.Domain.Repositories
 {
 	public interface IWordRepository : IRepository<Word>
 	{
+		int GetTotalNumberOfWords();
+
 		Word GetWordByStem(string stem, bool tracking, params Expression<Func<Word, object>>[] eagerLoadingProperties);
 	}
 }

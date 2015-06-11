@@ -41,6 +41,9 @@ namespace Root.Domain.Models
 			if (string.IsNullOrWhiteSpace(standard))
 				throw new HangerdException("词素内容不可为空");
 
+			if (string.IsNullOrWhiteSpace(description))
+				throw new HangerdException("词素描述不可为空");
+
 			if (!Enum.IsDefined(typeof (MorphemeType), type))
 				throw new HangerdException("未知词素类型");
 

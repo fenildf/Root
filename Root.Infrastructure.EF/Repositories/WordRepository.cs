@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Hangerd.EntityFramework;
 using Hangerd.Repository;
@@ -13,6 +14,11 @@ namespace Root.Infrastructure.EF.Repositories
 		public WordRepository(IRepositoryContext context)
 			: base(context)
 		{
+		}
+
+		public int GetTotalNumberOfWords()
+		{
+			return GetAll(false).Count();
 		}
 
 		public Word GetWordByStem(string stem, bool tracking, params Expression<Func<Word, object>>[] eagerLoadingProperties)

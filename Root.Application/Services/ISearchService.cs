@@ -17,6 +17,8 @@ namespace Root.Application.Services
 
 		#region Word
 
+		int GetTotalNumberOfWords();
+
 		WordDto GetWord(string wordStem);
 
 		IEnumerable<WordDto> GetWordListWithInterpretation(string fuzzyWord, int maxCount, out int totalCount);
