@@ -11,7 +11,7 @@ namespace Root.Web.Controllers
 {
 	public class MorphemeController : HangerdController
 	{
-		private const int MorphemeListSize = 30;
+		private const int MorphemeListSize = 40;
 
 		private readonly ISearchService _searchService;
 		private readonly IMaintainService _maintainService;
@@ -24,10 +24,10 @@ namespace Root.Web.Controllers
 			_maintainService = maintainService;
 		}
 
-		public ActionResult List(int pageIndex = 1)
+		public ActionResult List(int p = 1)
 		{
 			int totalCount;
-			var page = pageIndex < 1 ? 1 : pageIndex;
+			var page = p < 1 ? 1 : p;
 			var tasks = _searchService.GetAllMorphemes(page, MorphemeListSize, out totalCount);
 
 			return View(new PagedListModel<MorphemeDto>

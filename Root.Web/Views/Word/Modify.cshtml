@@ -21,31 +21,28 @@
 		<div class="form-group">
 			<label class="col-md-1 control-label">词　素:</label>
 			<div class="col-md-5">
-				@if (Model.Morphemes.Any())
-				{
-					<ul class="list-group">
-						@foreach (var item in Model.Morphemes.OrderBy(m => m.Order))
-						{
-							<li class="list-group-item">
-								<strong>@item.Morpheme.Standard</strong> @item.Morpheme.ToVariant() [ @item.Morpheme.Description ]
+				<ul class="list-group">
+					@foreach (var item in Model.Morphemes.OrderBy(m => m.Order))
+					{
+						<li class="list-group-item">
+							<strong>@item.Morpheme.Standard</strong> @item.Morpheme.ToVariant() [ @item.Morpheme.Description ]
 
-								@if (item.Morpheme.Type == MorphemeTypeDto.Root)
-								{
-									<span class="glyphicon glyphicon-flag"></span>
-								}
+							@if (item.Morpheme.Type == MorphemeTypeDto.Root)
+							{
+								<span class="glyphicon glyphicon-flag"></span>
+							}
 
-								<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeMorphemeForWord('@item.Morpheme.Id')">
-									<span class="glyphicon glyphicon-minus"></span>
-								</button>
-							</li>
-						}
-						<li class="list-group-item text-right">
-							<button id="btnShowSelectMorphemeModal" type="button" class="btn btn-sm btn-default">
-								<span class="glyphicon glyphicon-search"></span>
+							<button type="button" class="btn btn-xs btn-danger pull-right" onclick="removeMorphemeForWord('@item.Morpheme.Id')">
+								<span class="glyphicon glyphicon-minus"></span>
 							</button>
 						</li>
-					</ul>
-				}
+					}
+					<li class="list-group-item text-right">
+						<button id="btnShowSelectMorphemeModal" type="button" class="btn btn-sm btn-default">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</li>
+				</ul>
 			</div>
 		</div>
 

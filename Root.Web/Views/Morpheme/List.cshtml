@@ -25,5 +25,5 @@
 
 <div class="text-center">
 	@PageHelper.BootstrapPager(Model.PageIndex, Model.PageSize, Model.TotalNumber,
-						p => Url.Action("List", "Morpheme", new { pageIndex = p }))
+								p => Url.Action("List", "Morpheme", new { p }))
 </div>
