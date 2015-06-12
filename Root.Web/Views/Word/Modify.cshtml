@@ -236,12 +236,7 @@
 				success: function (data) {
 					if (data) {
 						for (var i = 0; i < data.length; i++) {
-							var item = "<li class=\"list-group-item\">" +
-								"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + data[i].Id + "')\"><span class=\"glyphicon glyphicon-plus\"></span></button>" +
-								"	&nbsp;&nbsp;" + data[i].Value +
-								"</li>";
-
-							morphemeList.append(item);
+							morphemeList.append(getMorphemeListItem(data[i]));
 						}
 					}
 
@@ -342,20 +337,22 @@
 					alert(result.Message);
 
 					if (result.Morpheme) {
-						$("#addMorphemeModal").modal("hide");
-						$("#selectMorphemeModal").modal("show");
-
-						var newItem = "<li class=\"list-group-item\">" +
-							"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + result.Morpheme.Id + "')\"><span class=\"glyphicon glyphicon-plus\"></span></button>" +
-							"	&nbsp;&nbsp;" + result.Morpheme.Value +
-							"</li>";
-
 						var lastItem = $("#morphemeList li:last-child");
 
-						lastItem.before(newItem);
+						lastItem.before(getMorphemeListItem(result.Morpheme));
+
+						$("#addMorphemeModal").modal("hide");
+						$("#selectMorphemeModal").modal("show");
 					}
 				}
 			});
 		});
+
+		function getMorphemeListItem (morpheme) {
+			return "<li class=\"list-group-item\">" +
+				"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + morpheme.Id + "')\"><span class=\"glyphicon glyphicon-plus\"></span></button>" +
+				"	&nbsp;&nbsp;" + morpheme.Value +
+				"</li>";
+		}
 	</script>
 }

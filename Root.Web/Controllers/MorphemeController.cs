@@ -6,6 +6,7 @@ using Hangerd.Utility;
 using Root.Application.DataObjects;
 using Root.Application.Services;
 using Root.Web.Models;
+using Root.Web.Models.Extensions;
 
 namespace Root.Web.Controllers
 {
@@ -55,7 +56,7 @@ namespace Root.Web.Controllers
 				Morpheme = result.Value == null ? null : new
 				{
 					result.Value.Id,
-					Value = string.Format("<strong>{0}</strong> {1} [ {2} ]", result.Value.Standard, result.Value.ToVariant(), result.Value.Description)
+					Value = result.Value.ToListItemValue()
 				}
 			});
 		}
@@ -102,7 +103,7 @@ namespace Root.Web.Controllers
 				.Select(m => new
 				{
 					m.Id,
-					Value = string.Format("<strong>{0}</strong> {1} [ {2} ]", m.Standard, m.ToVariant(), m.Description)
+					Value = m.ToListItemValue()
 				});
 
 			return JsonContent(morphemeList);
