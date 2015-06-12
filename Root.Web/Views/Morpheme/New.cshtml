@@ -51,30 +51,30 @@
 
 @section scripts {
 	<script type="text/javascript">
-		$("#btnSave").bind("click", function () {
-			if (!$.trim($("#Standard").val())) {
-				alert("词素本体不可为空");
-				return;
-			}
+	$("#btnSave").bind("click", function () {
+		if (!$.trim($("#Standard").val())) {
+			alert("词素本体不可为空");
+			return;
+		}
 
-			if (!$("#Description").val()) {
-				alert("词素描述不可为空");
-				return;
-			}
+		if (!$("#Description").val()) {
+			alert("词素描述不可为空");
+			return;
+		}
 
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				url: "@Url.Action("Add", "Morpheme")",
-				data: $("#addMorphemeForm").serialize(),
-				success: function (result) {
-					alert(result.Message);
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "@Url.Action("Add", "Morpheme")",
+			data: $("#addMorphemeForm").serialize(),
+			success: function (result) {
+				alert(result.Message);
 
-					if (result.Success) {
-						window.location.href = "@Url.Action("Index", "Home")";
-					}
+				if (result.Morpheme) {
+					window.location.href = "@Url.Action("Detail", "Morpheme")/" + result.Morpheme.Id;
 				}
-			});
+			}
 		});
+	});
 	</script>
 }

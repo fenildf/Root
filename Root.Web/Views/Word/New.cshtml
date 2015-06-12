@@ -40,7 +40,7 @@
 				success: function (result) {
 					alert(result.Message);
 
-					if (result.Word != null) {
+					if (result.Word) {
 						window.location.href = "@Url.Action("Modify", "Word")/" + result.Word.Stem;
 					}
 				}

@@ -22,7 +22,7 @@ namespace Root.Application.Services.Implementation
 
 		#region Morpheme
 
-		public HangerdResult<bool> AddMorpheme(MorphemeDto morphemeDto)
+		public HangerdResult<MorphemeDto> AddMorpheme(MorphemeDto morphemeDto)
 		{
 			return TryOperate(() =>
 			{
@@ -38,6 +38,8 @@ namespace Root.Application.Services.Implementation
 					morphemeRepository.Add(morpheme);
 
 					unitOfWork.Commit();
+
+					return Mapper.Map<Morpheme, MorphemeDto>(morpheme);
 				}
 			});
 		}

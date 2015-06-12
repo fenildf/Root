@@ -49,7 +49,15 @@ namespace Root.Web.Controllers
 		{
 			var result = _maintainService.AddMorpheme(morphemeDto);
 
-			return OperationJsonResult(result);
+			return JsonContent(new
+			{
+				result.Message,
+				Morpheme = result.Value == null ? null : new
+				{
+					result.Value.Id,
+					Value = string.Format("<strong>{0}</strong> {1} [ {2} ]", result.Value.Standard, result.Value.ToVariant(), result.Value.Description)
+				}
+			});
 		}
 
 		public ActionResult Detail(string id)

@@ -7,7 +7,7 @@ namespace Root.Application.Services
 	{
 		#region Morpheme
 
-		HangerdResult<bool> AddMorpheme(MorphemeDto morphemeDto);
+		HangerdResult<MorphemeDto> AddMorpheme(MorphemeDto morphemeDto);
 
 		HangerdResult<bool> ModifyMorpheme(string morphemeId, MorphemeDto morphemeDto);
 

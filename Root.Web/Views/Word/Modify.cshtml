@@ -219,10 +219,6 @@
 		}
 
 		$("#btnSearchMorpheme").bind("click", function () {
-			getSearchedMorphemeList();
-		});
-
-		function getSearchedMorphemeList () {
 			var morpheme = $.trim($("#txtMorpheme").val());
 
 			if (!morpheme) {
@@ -256,7 +252,7 @@
 					morphemeList.append(addMorphemeTip);
 				}
 			});
-		}
+		});
 
 		function addMorphemeForWord (morphemeId) {
 			$.ajax({
@@ -345,15 +341,21 @@
 				success: function (result) {
 					alert(result.Message);
 
-					if (result.Success) {
+					if (result.Morpheme) {
 						$("#addMorphemeModal").modal("hide");
 						$("#selectMorphemeModal").modal("show");
 
-						getSearchedMorphemeList();
+						var newItem = "<li class=\"list-group-item\">" +
+							"	<button type=\"button\" class=\"btn btn-xs btn-success\" onclick=\"addMorphemeForWord('" + result.Morpheme.Id + "')\"><span class=\"glyphicon glyphicon-plus\"></span></button>" +
+							"	&nbsp;&nbsp;" + result.Morpheme.Value +
+							"</li>";
+
+						var lastItem = $("#morphemeList li:last-child");
+
+						lastItem.before(newItem);
 					}
 				}
 			});
-
 		});
 	</script>
 }
